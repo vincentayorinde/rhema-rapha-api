@@ -8,7 +8,7 @@ export class RegisterDto {
   @IsEmail()
   email: string;
 
-  @IsNotEmpty({ message: 'Firstname cannot be null' })
+  @IsNotEmpty({ message: 'First name cannot be null' })
   fullName: string;
 
   @IsNotEmpty({ message: 'Phonenumber cannot be null' })
@@ -22,5 +22,22 @@ export class RegisterDto {
   public password: string;
 
   public avatar: string;
+
   public role: string;
+
+  dateOfBirth: Date;
+
+  address: string;
+
+  bloodType: string;
+
+  height: string;
+
+  bloodPressure: string;
+
+  public departmentId: string;
+
+  daysAvailable: string;
+
+  timesAvailable: string;
 }

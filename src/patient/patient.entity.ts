@@ -6,7 +6,7 @@ import { MedicationEntity } from '../medication/medication.entity';
 @Entity({ name: 'PatientTbl' })
 export class PatientEntity extends UserBaseEntity {
   @Column({ type: Date, nullable: false })
-  dateofBirth: Date;
+  dateOfBirth: Date;
 
   @Column({ type: 'varchar', nullable: true, length: '100' })
   address: string;
