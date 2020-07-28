@@ -1,4 +1,4 @@
-import { IdentityUserDto } from './identity-user.dto';
+import { IdentityUserDto } from './dto/identity-user.dto';
 import { IdentityUserRepository } from './identity-user.repository';
 import { ResultException } from '../../configuration/exceptions/result';
 import { Injectable, HttpStatus } from '@nestjs/common';

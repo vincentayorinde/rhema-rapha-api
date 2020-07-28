@@ -1,5 +1,5 @@
+import { UserRole } from '../../../shared/user-base.entity';
 import { IsNotEmpty, IsEmail, Length } from 'class-validator';
-import { UserRole } from '../../shared/user-base.entity';
 
 export class IdentityUserDto {
   id: string;

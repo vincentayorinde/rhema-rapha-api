@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsEmail, IsDateString, IsString } from 'class-validator';
-import { UserRole } from '../shared/user-base.entity';
+import { UserRole } from '../../shared/user-base.entity';
 
 export class PatientDto {
   id: string;

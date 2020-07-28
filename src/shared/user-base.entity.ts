@@ -1,9 +1,9 @@
 import {
-  BaseEntity,
   PrimaryGeneratedColumn,
+  Column,
   CreateDateColumn,
   UpdateDateColumn,
-  Column,
+  BaseEntity,
 } from 'typeorm';
 
 export enum UserRole {

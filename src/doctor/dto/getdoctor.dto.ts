@@ -1,14 +1,14 @@
 import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
-import { UserRole } from '../shared/user-base.entity';
+import { UserRole } from '../../shared/user-base.entity';
 
-export class DoctorDto {
+export class GetDoctorDto {
   public id: string;
 
   @IsNotEmpty({ message: 'Email cannot be null' })
   @IsEmail()
   public email: string;
 
-  @IsNotEmpty({ message: 'Firstname cannot be null' })
+  @IsNotEmpty({ message: 'First name cannot be null' })
   public fullName: string;
 
   @IsNotEmpty({ message: 'Phonenumber cannot be null' })
@@ -24,9 +24,6 @@ export class DoctorDto {
   timesAvailable: string;
 
   address: string;
-
-  @IsNotEmpty({ message: 'Password cannot be null' })
-  password: string;
 
   role: UserRole;
 

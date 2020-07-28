@@ -1,79 +1,79 @@
-import { DoctorDto } from './../doctor/doctor.dto';
-import { PatientDto } from './../patient/patient.dto';
+import { DoctorDto } from '../doctor/dto/doctor.dto';
+import { PatientDto } from '../patient/dto/patient.dto';
 import { IdentityUserService } from './identity-user/identity-user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { EXPIRESIN } from '../configuration/config';
 import { PasswordEncrypterService } from './auth-configuration/password-encrypter.service';
-import { IdentityUserDto } from './identity-user/identity-user.dto';
+import { IdentityUserDto } from './identity-user/dto/identity-user.dto';
 import { ResultException } from '../configuration/exceptions/result';
 import { DoctorService } from '../doctor/doctor.service';
 import { PatientService } from '../patient/patient.service';
 import { UserRole } from '../shared/user-base.entity';
+import { RegisterDto } from './identity-user/dto/register.dto';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
-    private passwordEncrypterService: PasswordEncrypterService,
-    private jwtService: JwtService,
-    private identityUserService: IdentityUserService,
-    private doctorService: DoctorService,
-    private patientService: PatientService,
+    private readonly passwordEncrypterService: PasswordEncrypterService,
+    private readonly jwtService: JwtService,
+    private readonly identityUserService: IdentityUserService,
+    private readonly doctorService: DoctorService,
+    private readonly patientService: PatientService,
   ) {}
 
-  public async registerPatient(patient: PatientDto): Promise<any> {
-    if (this.validateUser(patient.email)) {
+  public async register(data: RegisterDto) {
+    try {
+      if (!this.validateUser(data.email)) {
+        throw new HttpException(
+          { message: 'User Already Exit' },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
       const password = (
-        await this.passwordEncrypterService.encrypt(patient.email)
+        await this.passwordEncrypterService.encrypt(data.email)
       ).toString();
 
-      patient.password = password;
-      patient.role = UserRole.PATIENT;
-      return this.patientService.addPatient(patient);
-    } else {
-      throw new HttpException(
-        { message: 'Patient Already Exit' },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
-
-  public async registerDoctor(doctor: DoctorDto): Promise<any> {
-    if (this.validateUser(doctor.email)) {
-      const password = (
-        await this.passwordEncrypterService.encrypt(doctor.password)
-      ).toString();
-
-      doctor.password = password;
-      doctor.role = UserRole.DOCTOR;
-      return this.doctorService.addDoctor(doctor);
-    } else {
-      throw new HttpException(
-        { message: 'Doctor Already Exit' },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-  }
-
-  public async registerAdmin(user: IdentityUserDto): Promise<any> {
-    if (this.validateUser(user.email)) {
-      const password = (
-        await this.passwordEncrypterService.encrypt(user.password)
-      ).toString();
-
+      const user = new IdentityUserDto();
+      user.email = data.email;
+      user.fullName = data.fullName;
+      user.phonenumber = data.phonenumber;
+      user.username = data.username;
       user.password = password;
-      user.role = UserRole.ADMIN;
-      return this.identityUserService.createUser(user);
-    } else {
-      throw new HttpException(
-        { message: 'User Already Exit' },
-        HttpStatus.BAD_REQUEST,
-      );
+
+      this.registerUser(data, user);
+    } catch (error) {
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
+
+  private registerUser(data: any, user: IdentityUserDto) {
+    switch (data.role) {
+      case 'PATIENT':
+        user.role = UserRole.PATIENT;
+        this.patientService.addPatient(data);
+        break;
+
+      case 'DOCTOR':
+        user.role = UserRole.DOCTOR;
+        this.doctorService.addDoctor(data);
+        break;
+
+      case 'ADMIN':
+        user.role = UserRole.ADMIN;
+        this.identityUserService.createUser(user);
+        break;
+
+      default:
+        break;
+    }
+  }
+
   public async sigIn(user: { email: string; password: string }): Promise<any> {
     try {
       const dbUser = await this.identityUserService.getUserByEmail(user.email);
+
       if (dbUser) {
         const verifyPassword = await this.passwordEncrypterService.decrypt(
           user.password,
@@ -120,8 +120,8 @@ export class AuthenticationService {
     }
   }
 
-  public async validateUser(email: string) {
-    return this.identityUserService.getUserByEmail(email);
+  public async validateUser(data: any) {
+    return this.identityUserService.getUserByEmail(data.email);
   }
 
   private async createToken(id: string, email: string, role: UserRole) {

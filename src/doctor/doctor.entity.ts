@@ -1,5 +1,12 @@
 import { UserBaseEntity } from '../shared/user-base.entity';
-import { Column, OneToOne, Entity, ManyToOne } from 'typeorm';
+import {
+  Column,
+  OneToOne,
+  Entity,
+  ManyToOne,
+  Timestamp,
+  JoinColumn,
+} from 'typeorm';
 import { DepartmentEntity } from '../department/department.entity';
 import { AppointmentEntity } from '../appointment/appointment.entity';
 
@@ -18,6 +25,7 @@ export class DoctorEntity extends UserBaseEntity {
     () => DepartmentEntity,
     user => user.doctor,
   )
+  @JoinColumn({ name: 'departmentId' })
   department: DepartmentEntity;
 
   @OneToOne(
@@ -26,4 +34,6 @@ export class DoctorEntity extends UserBaseEntity {
     { cascade: true, eager: true },
   )
   appointment: AppointmentEntity;
+
+  departmentId: string;
 }

@@ -1,4 +1,4 @@
-import { PatientDto } from './patient.dto';
+import { PatientDto } from './dto/patient.dto';
 import {
   Controller,
   UseGuards,

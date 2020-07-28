@@ -1,5 +1,5 @@
-import { DoctorDto } from './../../doctor/doctor.dto';
-import { PatientDto } from './../../patient/patient.dto';
+import { DoctorDto } from '../../doctor/dto/doctor.dto';
+import { PatientDto } from '../../patient/dto/patient.dto';
 import {
   Controller,
   Post,
@@ -16,7 +16,8 @@ import { ValidatorPipe } from '../../shared/pipes/validator.pipe';
 import { AuthenticationService } from '../authentication.service';
 import { AuthGuard } from '@nestjs/passport';
 import { IdentityUserService } from './identity-user.service';
-import { IdentityUserDto } from './identity-user.dto';
+import { IdentityUserDto } from './dto/identity-user.dto';
+import { GetDoctorDto } from '../../doctor/dto/getdoctor.dto';
 
 @Controller('auth')
 export class IdentityUserController {

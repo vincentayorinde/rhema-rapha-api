@@ -15,10 +15,10 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalExceptionFilter());
 
   const options = new DocumentBuilder()
-    .setTitle('Wave School Kit')
-    .setDescription('The Wave School Kit API description')
+    .setTitle('Rhema Rapha API')
+    .setDescription('Rhema Rapha API description')
     .setVersion('1.0')
-    .addTag('School')
+    .addTag('Clinic')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

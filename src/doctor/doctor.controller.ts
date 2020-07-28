@@ -17,7 +17,7 @@ import { Roles } from '../authentication/auth-guard/role.decorator';
 import { QueryModel } from '../shared/model/query.model';
 import { Response } from 'express';
 import { DoctorService } from './doctor.service';
-import { DoctorDto } from './doctor.dto';
+import { DoctorDto } from './dto/doctor.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../authentication/auth-guard/role.guard';
 

@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorRepository } from './doctor.repository';
 import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
-import { DoctorDto } from './doctor.dto';
+import { DoctorDto } from './dto/doctor.dto';
+import { GetDoctorDto } from './dto/getdoctor.dto';
 
 @Injectable()
 export class DoctorService {
@@ -34,9 +35,17 @@ export class DoctorService {
     }
   }
 
-  public async getDoctor(id: string) {
+  public async getDoctor(id: string): Promise<GetDoctorDto> {
     try {
       return await this.doctorRepository.findOne(id);
+    } catch (error) {
+      new ResultException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  public async getDoctorByEmail(email: string) {
+    try {
+      return await this.doctorRepository.findOne({ email });
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }
