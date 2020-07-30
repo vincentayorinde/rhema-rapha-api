@@ -24,7 +24,8 @@ export class AuthenticationService {
 
   public async register(data: RegisterDto) {
     try {
-      if (!this.validateUser(data.email)) {
+      const dbUser = await this.validateUser(data.email);
+      if (Object.keys(dbUser).length === 0) {
         throw new HttpException(
           { message: 'User Already Exit' },
           HttpStatus.BAD_REQUEST,
@@ -49,23 +50,22 @@ export class AuthenticationService {
   }
 
   private registerUser(data: any, user: IdentityUserDto) {
-    switch (data.role) {
-      case 'PATIENT':
+    const role = data.role.toLowerCase();
+    switch (role) {
+      case 'patient':
         user.role = UserRole.PATIENT;
-        this.patientService.addPatient(data);
-        break;
+        return this.patientService.addPatient(data);
 
-      case 'DOCTOR':
+      case 'doctor':
         user.role = UserRole.DOCTOR;
-        this.doctorService.addDoctor(data);
-        break;
+        return this.doctorService.addDoctor(data);
 
-      case 'ADMIN':
+      case 'admin':
         user.role = UserRole.ADMIN;
-        this.identityUserService.createUser(user);
-        break;
+        return this.identityUserService.createUser(user);
 
       default:
+        new ResultException('Invalid Role', HttpStatus.BAD_REQUEST);
         break;
     }
   }
@@ -120,8 +120,8 @@ export class AuthenticationService {
     }
   }
 
-  public async validateUser(data: any) {
-    return this.identityUserService.getUserByEmail(data.email);
+  public async validateUser(email: string) {
+    return await this.identityUserService.getUserByEmail(email);
   }
 
   private async createToken(id: string, email: string, role: UserRole) {

@@ -1,5 +1,4 @@
 import { IsNotEmpty, IsEmail, Length } from 'class-validator';
-import { UserRole } from 'src/shared/user-base.entity';
 
 export class RegisterDto {
   id: string;
@@ -11,18 +10,19 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'First name cannot be null' })
   fullName: string;
 
-  @IsNotEmpty({ message: 'Phonenumber cannot be null' })
+  @IsNotEmpty({ message: 'Phone number cannot be null' })
   phonenumber: string;
 
-  @IsNotEmpty({ message: 'username cannot be null' })
+  @IsNotEmpty({ message: 'Username cannot be null' })
   username: string;
 
   @Length(8)
-  @IsNotEmpty({ message: 'password cannot be null' })
+  @IsNotEmpty({ message: 'Password cannot be null' })
   public password: string;
 
   public avatar: string;
 
+  @IsNotEmpty({ message: 'Role cannot be null' })
   public role: string;
 
   dateOfBirth: Date;

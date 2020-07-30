@@ -16,8 +16,7 @@ import { ValidatorPipe } from '../../shared/pipes/validator.pipe';
 import { AuthenticationService } from '../authentication.service';
 import { AuthGuard } from '@nestjs/passport';
 import { IdentityUserService } from './identity-user.service';
-import { IdentityUserDto } from './dto/identity-user.dto';
-import { GetDoctorDto } from '../../doctor/dto/getdoctor.dto';
+import { RegisterDto } from './dto/register.dto';
 
 @Controller('auth')
 export class IdentityUserController {
@@ -28,31 +27,8 @@ export class IdentityUserController {
 
   @Post('register')
   @UsePipes(new ValidatorPipe())
-  public async registerPatient(@Body() user: PatientDto, @Res() res: Response) {
-    const response = await this.authService.registerPatient(user);
-
-    return res
-      .status(HttpStatus.CREATED)
-      .json({ message: 'Registration Successful', data: response });
-  }
-
-  @Post('register/doctor')
-  @UsePipes(new ValidatorPipe())
-  public async registerDoctor(@Body() user: DoctorDto, @Res() res: Response) {
-    const response = await this.authService.registerDoctor(user);
-
-    return res
-      .status(HttpStatus.CREATED)
-      .json({ message: 'Registration Successful', data: response });
-  }
-
-  @Post('register/admin')
-  @UsePipes(new ValidatorPipe())
-  public async registerUser(
-    @Body() user: IdentityUserDto,
-    @Res() res: Response,
-  ) {
-    const response = await this.authService.registerAdmin(user);
+  public async register(@Body() user: RegisterDto, @Res() res: Response) {
+    const response = await this.authService.register(user);
 
     return res
       .status(HttpStatus.CREATED)
