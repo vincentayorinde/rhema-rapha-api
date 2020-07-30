@@ -61,7 +61,6 @@ export class IdentityUserController {
   @Get('users')
   public async getUsers(@Res() res: Response) {
     const response = await this.identityUserService.getAllUser();
-
     return res
       .status(HttpStatus.OK)
       .json({ message: 'Identity  Users', data: response });

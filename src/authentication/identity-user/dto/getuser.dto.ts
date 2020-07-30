@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsEmail, Length } from 'class-validator';
 import { UserRole } from 'src/shared/user-base.entity';
 
-export class IdentityUserDto {
+export class GetUserDto {
   id: string;
 
   @IsNotEmpty({ message: 'Email cannot be null' })

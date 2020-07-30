@@ -13,10 +13,7 @@ export class DepartmentService {
   ) {}
   public async getDepartments(query: QueryModel) {
     try {
-      return await this.departmentRepository.find({
-        take: query.pageSize,
-        skip: query.pageSize * (query.page - 1),
-      });
+      return await this.departmentRepository.find();
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }

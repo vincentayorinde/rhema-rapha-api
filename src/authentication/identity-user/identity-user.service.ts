@@ -4,6 +4,7 @@ import { ResultException } from '../../configuration/exceptions/result';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IdentityUserEntity } from './identity-user.entity';
+import { GetUserDto } from './dto/getuser.dto';
 
 @Injectable()
 export class IdentityUserService {
@@ -12,7 +13,7 @@ export class IdentityUserService {
     private IdentityUserRepository: IdentityUserRepository,
   ) {}
 
-  public async getUserByEmail(email: string): Promise<IdentityUserEntity> {
+  public async getUserByEmail(email: string): Promise<IdentityUserDto> {
     try {
       return await this.IdentityUserRepository.findOne({ email });
     } catch (error) {
@@ -20,7 +21,7 @@ export class IdentityUserService {
     }
   }
 
-  public async getUserById(id: string): Promise<IdentityUserEntity> {
+  public async getUserById(id: string): Promise<IdentityUserDto> {
     try {
       return await this.IdentityUserRepository.findOne(id);
     } catch (error) {
@@ -28,7 +29,7 @@ export class IdentityUserService {
     }
   }
 
-  public async getAllUser(): Promise<IdentityUserEntity[]> {
+  public async getAllUser(): Promise<GetUserDto[]> {
     try {
       return await this.IdentityUserRepository.find();
     } catch (error) {

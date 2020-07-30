@@ -1,5 +1,3 @@
-import { DoctorDto } from '../doctor/dto/doctor.dto';
-import { PatientDto } from '../patient/dto/patient.dto';
 import { IdentityUserService } from './identity-user/identity-user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -25,7 +23,8 @@ export class AuthenticationService {
   public async register(data: RegisterDto) {
     try {
       const dbUser = await this.validateUser(data.email);
-      if (Object.keys(dbUser).length === 0) {
+
+      if (typeof dbUser === 'object' && dbUser !== null) {
         throw new HttpException(
           { message: 'User Already Exit' },
           HttpStatus.BAD_REQUEST,
@@ -33,7 +32,7 @@ export class AuthenticationService {
       }
 
       const password = (
-        await this.passwordEncrypterService.encrypt(data.email)
+        await this.passwordEncrypterService.encrypt(data.password)
       ).toString();
 
       const user = new IdentityUserDto();
@@ -74,7 +73,7 @@ export class AuthenticationService {
     try {
       const dbUser = await this.identityUserService.getUserByEmail(user.email);
 
-      if (dbUser) {
+      if (Object.keys(dbUser).length !== 0) {
         const verifyPassword = await this.passwordEncrypterService.decrypt(
           user.password,
           dbUser.password,
