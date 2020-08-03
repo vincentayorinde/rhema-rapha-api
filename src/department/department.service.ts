@@ -1,7 +1,6 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DepartmentRepository } from './department.repository';
-import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
 import { DepartmentDto } from './department.dto';
 
@@ -11,7 +10,7 @@ export class DepartmentService {
     @InjectRepository(DepartmentRepository)
     private readonly departmentRepository: DepartmentRepository,
   ) {}
-  public async getDepartments(query: QueryModel) {
+  public async getDepartments() {
     try {
       return await this.departmentRepository.find();
     } catch (error) {

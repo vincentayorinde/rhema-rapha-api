@@ -30,7 +30,7 @@ export class MedicationEntity extends SharedBaseEntity {
 
   @ManyToOne(
     () => PatientEntity,
-    user => user.medication,
+    patient => patient.medication,
   )
   patient: PatientEntity;
 }

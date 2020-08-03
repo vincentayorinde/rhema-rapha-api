@@ -23,14 +23,13 @@ export class DoctorEntity extends UserBaseEntity {
 
   @ManyToOne(
     () => DepartmentEntity,
-    user => user.doctor,
+    department => department.doctor,
   )
-  @JoinColumn({ name: 'departmentId' })
   department: DepartmentEntity;
 
   @OneToOne(
     () => AppointmentEntity,
-    user => user.doctor,
+    appointment => appointment.doctor,
     { cascade: true, eager: true },
   )
   appointment: AppointmentEntity;

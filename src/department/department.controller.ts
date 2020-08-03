@@ -28,11 +28,8 @@ export class DepartmentController {
 
   @Get()
   @Roles('admin')
-  public async getDepartments(
-    @Res() res: Response,
-    @Query() query: QueryModel,
-  ) {
-    const response = await this.departmentService.getDepartments(query);
+  public async getDepartments(@Res() res: Response) {
+    const response = await this.departmentService.getDepartments();
     return res
       .status(HttpStatus.OK)
       .json({ message: 'All Departments data', data: response });
