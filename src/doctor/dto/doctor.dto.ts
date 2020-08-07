@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
 import { UserRole } from '../../shared/user-base.entity';
-import { Timestamp } from 'typeorm';
 
 export class DoctorDto {
   public id: string;
@@ -15,7 +14,6 @@ export class DoctorDto {
   @IsNotEmpty({ message: 'Phonenumber cannot be null' })
   public phonenumber: string;
 
-  @IsNotEmpty({ message: 'Department cannot be null' })
   public departmentId: string;
 
   @IsNotEmpty({ message: 'Days Available cannot be null' })

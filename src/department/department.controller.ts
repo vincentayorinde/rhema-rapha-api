@@ -22,7 +22,7 @@ import { DepartmentDto } from './department.dto';
 import { Response } from 'express';
 
 @Controller('department')
-// @UseGuards(AuthGuard(), RoleGuard)
+@UseGuards(AuthGuard(), RoleGuard)
 export class DepartmentController {
   constructor(private readonly departmentService: DepartmentService) {}
 

@@ -29,7 +29,7 @@ export class DoctorController {
   @Get()
   @Roles('admin')
   public async getDoctors(@Res() res: Response, @Query() query: QueryModel) {
-    const response = await this.doctorService.getDoctors(query);
+    const response = await this.doctorService.getDoctors();
     return res
       .status(HttpStatus.OK)
       .json({ message: 'All Doctors data', data: response });

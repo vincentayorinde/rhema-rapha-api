@@ -1,12 +1,5 @@
 import { UserBaseEntity } from '../shared/user-base.entity';
-import {
-  Column,
-  OneToOne,
-  Entity,
-  ManyToOne,
-  Timestamp,
-  JoinColumn,
-} from 'typeorm';
+import { Column, OneToOne, Entity, ManyToOne, JoinColumn } from 'typeorm';
 import { DepartmentEntity } from '../department/department.entity';
 import { AppointmentEntity } from '../appointment/appointment.entity';
 
@@ -24,7 +17,9 @@ export class DoctorEntity extends UserBaseEntity {
   @ManyToOne(
     () => DepartmentEntity,
     department => department.doctor,
+    { cascade: true, eager: true },
   )
+  @JoinColumn({ name: 'department' })
   department: DepartmentEntity;
 
   @OneToOne(
@@ -32,6 +27,7 @@ export class DoctorEntity extends UserBaseEntity {
     appointment => appointment.doctor,
     { cascade: true, eager: true },
   )
+  @JoinColumn({ name: 'appointment' })
   appointment: AppointmentEntity;
 
   departmentId: string;

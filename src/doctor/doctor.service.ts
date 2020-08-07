@@ -5,6 +5,8 @@ import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
 import { DoctorDto } from './dto/doctor.dto';
 import { GetDoctorDto } from './dto/getdoctor.dto';
+import { Roles } from '../authentication/auth-guard/role.decorator';
+import { UserRole } from '../shared/user-base.entity';
 
 @Injectable()
 export class DoctorService {
@@ -13,13 +15,9 @@ export class DoctorService {
     private readonly doctorRepository: DoctorRepository,
   ) {}
 
-  public async getDoctors(query: QueryModel) {
+  public async getDoctors() {
     try {
-      return await this.doctorRepository.find({
-        take: query.pageSize,
-        skip: query.pageSize * (query.page - 1),
-        order: { createdAt: 'DESC' },
-      });
+      return await this.doctorRepository.find({ relations: ['department'] });
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }
@@ -53,6 +51,7 @@ export class DoctorService {
 
   public async addDoctor(newDoctor: DoctorDto) {
     try {
+      newDoctor.role = UserRole.DOCTOR;
       return await this.doctorRepository.save(newDoctor);
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);

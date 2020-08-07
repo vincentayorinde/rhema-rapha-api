@@ -6,7 +6,7 @@ import { SECRET } from '../../configuration/config';
 import { ResultException } from '../../configuration/exceptions/result';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy,'jwt') {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private readonly authenticationService: AuthenticationService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy,'jwt') {
   }
 
   public async validate(req: any, _payload: any) {
-    const isValid = await this.authenticationService.validateUser(req);
+    const isValid = await this.authenticationService.validateUser(req.email);
 
     if (!isValid) {
       return new ResultException('Unauthorized', HttpStatus.UNAUTHORIZED);

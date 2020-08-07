@@ -8,7 +8,4 @@ export class DepartmentDto {
 
   @IsNotEmpty({ message: 'Department description not provided' })
   description: string;
-
-  @IsNotEmpty({ message: 'Doctor Id not provided' })
-  doctorId: string;
 }
