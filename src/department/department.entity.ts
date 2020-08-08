@@ -18,7 +18,7 @@ export class DepartmentEntity extends SharedBaseEntity {
 
   @OneToMany(
     () => DoctorEntity,
-    user => user.department,
+    doctor => doctor.department,
     { cascade: true, eager: true },
   )
   doctor: DoctorEntity[];

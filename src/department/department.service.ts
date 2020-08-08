@@ -3,7 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DepartmentRepository } from './department.repository';
 import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
-import { DepartmentDto } from './department.dto';
+import { DepartmentDto } from './dto/department.dto';
+import { query } from 'express';
 
 @Injectable()
 export class DepartmentService {
@@ -13,7 +14,12 @@ export class DepartmentService {
   ) {}
   public async getDepartments(query: QueryModel) {
     try {
-      return await this.departmentRepository.find();
+      return await this.departmentRepository.find({
+        where: ['doctor'],
+        take: query.pageSize,
+        skip: query.pageSize * (query.page - 1),
+        order: { createdAt: 'DESC' },
+      });
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AppointmentRepository } from './appointment.repository';
 import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
-import { AppointmentDto } from './appointment.dto';
+import { AppointmentDto } from './dto/appointment.dto';
 
 @Injectable()
 export class AppointmentService {
@@ -23,6 +23,7 @@ export class AppointmentService {
   public async getAppointments(query: QueryModel) {
     try {
       return await this.appointmentRepository.find({
+        relations: ['doctor'],
         take: query.pageSize,
         skip: query.pageSize * (query.page - 1),
         order: { createdAt: 'DESC' },

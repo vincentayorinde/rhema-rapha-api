@@ -1,28 +1,28 @@
 import { IsDateString, IsNotEmpty, IsString } from 'class-validator';
 
 export class AppointmentDto {
-  id: string;
-  description: string;
+  readonly id: string;
+  readonly description: string;
 
   @IsDateString({ message: 'Date is not valid' })
   @IsNotEmpty({ message: 'Date is not provided' })
-  date: Date;
+  readonly date: Date;
 
   @IsDateString({ message: 'Date is not valid' })
   @IsNotEmpty({ message: 'Time is not provided' })
-  appointmentTime: Date;
+  readonly appointmentTime: Date;
 
   @IsNotEmpty({ message: 'Type is not provided' })
   @IsString()
-  type: string;
+  readonly type: string;
 
   @IsNotEmpty({ message: 'Appointment Day is not provided' })
   @IsString()
-  appointmentDay: Date;
+  readonly appointmentDay: Date;
 
   @IsNotEmpty({ message: 'Doctor Id is not provided' })
-  doctorId: string;
+  readonly doctorId: string;
 
   @IsNotEmpty({ message: 'Patient Id is not provided' })
-  patientId: string;
+  readonly patientId: string;
 }

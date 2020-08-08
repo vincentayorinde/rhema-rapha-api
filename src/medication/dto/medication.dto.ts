@@ -1,33 +1,33 @@
 import { IsNotEmpty, IsNumber, IsDateString } from 'class-validator';
 
 export class MedicationDto {
-  id: string;
+  public readonly id: string;
 
   @IsNotEmpty({ message: 'Medicine name cannot be null' })
-  medicineName: string;
+  public readonly medicineName: string;
 
   @IsNotEmpty({ message: 'Dose cannot be null' })
   @IsNumber()
-  dose: number;
+  public readonly dose: number;
 
   @IsNotEmpty({ message: 'Note cannot be null' })
-  note: string;
+  public readonly note: string;
 
   @IsNotEmpty({ message: 'Dose 0ne cannot be null' })
-  dose0ne: Date;
+  public readonly dose0ne: Date;
 
   @IsDateString()
-  doseTwo: Date;
+  public readonly doseTwo: Date;
 
   @IsDateString()
-  doseThree: Date;
+  public readonly doseThree: Date;
 
   @IsDateString()
-  doseFour: Date;
+  public readonly doseFour: Date;
 
-  startDate: Date;
+  public readonly startDate: Date;
 
-  endDate: Date;
+  public readonly endDate: Date;
 
-  patientId: string;
+  public readonly patientId: string;
 }

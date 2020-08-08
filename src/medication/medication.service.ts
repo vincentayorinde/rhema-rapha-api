@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MedicationRepository } from './medication.repository';
 import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
-import { MedicationDto } from './medication.dto';
+import { MedicationDto } from './dto/medication.dto';
 
 @Injectable()
 export class MedicationService {

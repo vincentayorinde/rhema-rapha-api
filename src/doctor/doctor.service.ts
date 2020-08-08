@@ -16,6 +16,7 @@ export class DoctorService {
   public async getDoctors(query: QueryModel) {
     try {
       return await this.doctorRepository.find({
+        relations: ['department'],
         take: query.pageSize,
         skip: query.pageSize * (query.page - 1),
         order: { createdAt: 'DESC' },
@@ -27,9 +28,7 @@ export class DoctorService {
 
   public async getByDepartmentId(id: string) {
     try {
-      return await this.doctorRepository.find({
-        where: id,
-      });
+      return await this.doctorRepository.find({});
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }

@@ -19,13 +19,13 @@ export class AppointmentEntity extends SharedBaseEntity {
 
   @OneToOne(
     () => DoctorEntity,
-    user => user.appointment,
+    doctor => doctor.appointment,
   )
   doctor: DoctorEntity;
 
   @OneToOne(
     () => PatientEntity,
-    user => user.appointment,
+    patient => patient.appointment,
   )
   patient: PatientEntity;
 }

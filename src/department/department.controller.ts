@@ -18,7 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../authentication/auth-guard/role.guard';
 import { Roles } from '../authentication/auth-guard/role.decorator';
 import { QueryModel } from '../shared/model/query.model';
-import { DepartmentDto } from './department.dto';
+import { DepartmentDto } from './dto/department.dto';
 import { Response } from 'express';
 
 @Controller('department')

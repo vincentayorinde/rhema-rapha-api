@@ -2,30 +2,30 @@ import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
 import { UserRole } from '../../shared/user-base.entity';
 
 export class GetDoctorDto {
-  public id: string;
+  public readonly id: string;
 
   @IsNotEmpty({ message: 'Email cannot be null' })
   @IsEmail()
-  public email: string;
+  public readonly email: string;
 
   @IsNotEmpty({ message: 'First name cannot be null' })
-  public fullName: string;
+  public readonly fullName: string;
 
   @IsNotEmpty({ message: 'Phonenumber cannot be null' })
-  public phonenumber: string;
+  public readonly phonenumber: string;
 
   @IsNotEmpty({ message: 'Department cannot be null' })
-  public departmentId: string;
+  public readonly departmentId: string;
 
   @IsNotEmpty({ message: 'Days Available cannot be null' })
-  daysAvailable: string;
+  public readonly daysAvailable: string;
 
   @IsNotEmpty({ message: 'Days Available cannot be null' })
-  timesAvailable: string;
+  public readonly timesAvailable: string;
 
-  address: string;
+  public readonly address: string;
 
-  role: UserRole;
+  public readonly role: UserRole;
 
-  avatar: string;
+  public readonly avatar: string;
 }
