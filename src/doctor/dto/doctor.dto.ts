@@ -27,7 +27,7 @@ export class DoctorDto {
   public readonly address: string;
 
   @IsNotEmpty({ message: 'Password cannot be null' })
-  public readonly password: string;
+  public password: string;
 
   public readonly role: UserRole;
 

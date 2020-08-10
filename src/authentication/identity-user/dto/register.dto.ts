@@ -5,39 +5,39 @@ export class RegisterDto {
 
   @IsNotEmpty({ message: 'Email cannot be null' })
   @IsEmail()
-  public readonly email: string;
+  public email: string;
 
   @IsNotEmpty({ message: 'First name cannot be null' })
-  public readonly fullName: string;
+  public fullName: string;
 
   @IsNotEmpty({ message: 'Phone number cannot be null' })
-  public readonly phonenumber: string;
+  public phonenumber: string;
 
   @IsNotEmpty({ message: 'Username cannot be null' })
-  public readonly username: string;
+  public username: string;
 
   @Length(8)
   @IsNotEmpty({ message: 'Password cannot be null' })
-  public readonly password: string;
+  public password: string;
 
-  public readonly avatar: string;
+  public avatar: string;
 
   @IsNotEmpty({ message: 'Role cannot be null' })
-  public readonly role: string;
+  public role: string;
 
-  public readonly dateOfBirth: Date;
+  public dateOfBirth: Date;
 
-  public readonly address: string;
+  public address: string;
 
-  public readonly bloodType: string;
+  public bloodType: string;
 
-  public readonly height: string;
+  public height: string;
 
-  public readonly bloodPressure: string;
+  public bloodPressure: string;
 
-  public readonly departmentId: string;
+  public departmentId: string;
 
-  public readonly daysAvailable: string;
+  public daysAvailable: string;
 
-  public readonly timesAvailable: string;
+  public timesAvailable: string;
 }

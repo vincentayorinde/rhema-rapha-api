@@ -22,7 +22,7 @@ export class PatientEntity extends UserBaseEntity {
 
   @OneToOne(
     () => AppointmentEntity,
-    user => user.patient,
+    appointment => appointment.patient,
     { cascade: true, eager: true },
   )
   @JoinColumn({ name: 'appointmentId' })
@@ -30,7 +30,7 @@ export class PatientEntity extends UserBaseEntity {
 
   @OneToMany(
     () => MedicationEntity,
-    user => user.patient,
+    medication => medication.patient,
     { cascade: true, eager: true },
   )
   @JoinColumn({ name: 'medicationId' })

@@ -29,7 +29,7 @@ export class PatientDto {
   public readonly phonenumber: string;
 
   @IsNotEmpty({ message: 'Password must be provided' })
-  public readonly password: string;
+  public password: string;
 
   public readonly role: UserRole;
   public readonly avatar: string;

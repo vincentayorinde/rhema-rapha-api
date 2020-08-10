@@ -20,7 +20,7 @@ export class AuthenticationService {
     private readonly patientService: PatientService,
   ) {}
 
-  public async register(data: RegisterDto) {
+  public async register(data: RegisterDto): Promise<any> {
     try {
       const dbUser = await this.validateUser(data.email);
 
@@ -94,7 +94,8 @@ export class AuthenticationService {
     }
   }
 
-  public async googleLogin(req: any) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  public async googleLogin(req: any): Promise<any> {
     if (!req.user) {
       return new ResultException('No user from google', HttpStatus.BAD_REQUEST);
     }
@@ -119,7 +120,7 @@ export class AuthenticationService {
     }
   }
 
-  public async validateUser(email: string) {
+  public async validateUser(email: string): Promise<any> {
     return await this.identityUserService.getUserByEmail(email);
   }
 
@@ -131,7 +132,7 @@ export class AuthenticationService {
     return { expiresIn: expiresIn, token };
   }
 
-  public verifyToken(token: string) {
+  public verifyToken(token: string): any {
     this.jwtService.verify(token);
   }
 }

@@ -1,10 +1,10 @@
+import { PasswordEncrypterService } from './../authentication/auth-configuration/password-encrypter.service';
 import { PatientController } from './patient.controller';
 import { PatientService } from './patient.service';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PatientRepository } from './patient.repository';
 import { PassportModule } from '@nestjs/passport';
-import { AuthenticationModule } from '../authentication/authentication.module';
 
 @Module({
   imports: [
@@ -14,7 +14,7 @@ import { AuthenticationModule } from '../authentication/authentication.module';
     }),
   ],
   controllers: [PatientController],
-  providers: [PatientService],
+  providers: [PatientService, PasswordEncrypterService],
   exports: [PatientService],
 })
 export class PatientModule {}

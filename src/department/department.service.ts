@@ -4,7 +4,6 @@ import { DepartmentRepository } from './department.repository';
 import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
 import { DepartmentDto } from './dto/department.dto';
-import { query } from 'express';
 
 @Injectable()
 export class DepartmentService {
@@ -12,10 +11,10 @@ export class DepartmentService {
     @InjectRepository(DepartmentRepository)
     private readonly departmentRepository: DepartmentRepository,
   ) {}
-  public async getDepartments(query: QueryModel) {
+  public async getDepartments(query: QueryModel): Promise<any> {
     try {
       return await this.departmentRepository.find({
-        where: ['doctor'],
+        relations: ['doctor'],
         take: query.pageSize,
         skip: query.pageSize * (query.page - 1),
         order: { createdAt: 'DESC' },
@@ -24,21 +23,24 @@ export class DepartmentService {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
-  public async getDepartment(id: string) {
+  public async getDepartment(id: string): Promise<any> {
     try {
       return await this.departmentRepository.findOne(id);
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
-  public async addDepartment(newDepartment: DepartmentDto) {
+  public async addDepartment(newDepartment: DepartmentDto): Promise<any> {
     try {
       return await this.departmentRepository.save(newDepartment);
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
-  public async updateDepartment(id: string, newDepartment: DepartmentDto) {
+  public async updateDepartment(
+    id: string,
+    newDepartment: DepartmentDto,
+  ): Promise<any> {
     try {
       const dbDepartment = this.getDepartment(id);
       if (dbDepartment) {
@@ -50,7 +52,7 @@ export class DepartmentService {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
-  public async deleteDepartment(id: string) {
+  public async deleteDepartment(id: string): Promise<any> {
     try {
       return await this.departmentRepository.delete(id);
     } catch (error) {

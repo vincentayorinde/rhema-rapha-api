@@ -2,25 +2,25 @@ import { UserRole } from '../../../shared/user-base.entity';
 import { IsNotEmpty, IsEmail, Length } from 'class-validator';
 
 export class IdentityUserDto {
-  public readonly id: string;
+  public id: string;
 
   @IsNotEmpty({ message: 'Email cannot be null' })
   @IsEmail()
-  public readonly email: string;
+  public email: string;
 
   @IsNotEmpty({ message: 'Firstname cannot be null' })
-  public readonly fullName: string;
+  public fullName: string;
 
   @IsNotEmpty({ message: 'Phonenumber cannot be null' })
-  public readonly phonenumber: string;
+  public phonenumber: string;
 
   @IsNotEmpty({ message: 'username cannot be null' })
-  public readonly username: string;
+  public username: string;
 
   @Length(8)
   @IsNotEmpty({ message: 'password cannot be null' })
-  public readonly password: string;
+  public password: string;
 
-  public readonly avatar: string;
-  public readonly role: UserRole = UserRole.ADMIN;
+  public avatar: string;
+  public role: UserRole = UserRole.ADMIN;
 }

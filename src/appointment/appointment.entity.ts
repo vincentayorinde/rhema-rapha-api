@@ -1,7 +1,7 @@
 import { DoctorEntity } from './../doctor/doctor.entity';
 import { PatientEntity } from './../patient/patient.entity';
 import { SharedBaseEntity } from '../shared/shared-base.entity';
-import { Column, Entity, OneToOne } from 'typeorm';
+import { Column, Entity, OneToMany, ManyToOne } from 'typeorm';
 
 @Entity({ name: 'AppointmentTbl' })
 export class AppointmentEntity extends SharedBaseEntity {
@@ -17,13 +17,13 @@ export class AppointmentEntity extends SharedBaseEntity {
   @Column({ type: 'varchar', nullable: false, length: '100' })
   type: string;
 
-  @OneToOne(
+  @ManyToOne(
     () => DoctorEntity,
     doctor => doctor.appointment,
   )
   doctor: DoctorEntity;
 
-  @OneToOne(
+  @OneToMany(
     () => PatientEntity,
     patient => patient.appointment,
   )

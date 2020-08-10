@@ -12,7 +12,7 @@ export class AppointmentService {
     private readonly appointmentRepository: AppointmentRepository,
   ) {}
 
-  public async getByUserId(userId: string) {
+  public async getByUserId(userId: string): Promise<any> {
     try {
       return await this.appointmentRepository.find({ where: userId });
     } catch (error) {
@@ -20,10 +20,10 @@ export class AppointmentService {
     }
   }
 
-  public async getAppointments(query: QueryModel) {
+  public async getAppointments(query: QueryModel): Promise<any> {
     try {
       return await this.appointmentRepository.find({
-        relations: ['doctor'],
+        relations: ['doctor', 'doctor.appointment'],
         take: query.pageSize,
         skip: query.pageSize * (query.page - 1),
         order: { createdAt: 'DESC' },
@@ -33,7 +33,7 @@ export class AppointmentService {
     }
   }
 
-  public async getAppointment(id: string) {
+  public async getAppointment(id: string): Promise<any> {
     try {
       return await this.appointmentRepository.findOne(id);
     } catch (error) {

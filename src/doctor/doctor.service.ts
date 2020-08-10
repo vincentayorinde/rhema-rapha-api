@@ -13,10 +13,10 @@ export class DoctorService {
     private readonly doctorRepository: DoctorRepository,
   ) {}
 
-  public async getDoctors(query: QueryModel) {
+  public async getDoctors(query: QueryModel): Promise<any> {
     try {
       return await this.doctorRepository.find({
-        relations: ['department'],
+        relations: ['appointment'],
         take: query.pageSize,
         skip: query.pageSize * (query.page - 1),
         order: { createdAt: 'DESC' },
@@ -26,9 +26,9 @@ export class DoctorService {
     }
   }
 
-  public async getByDepartmentId(id: string) {
+  public async getByDepartmentId(id: string): Promise<any> {
     try {
-      return await this.doctorRepository.find({});
+      return await this.doctorRepository.find({ where: 'departmentId is id' });
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }
@@ -42,7 +42,7 @@ export class DoctorService {
     }
   }
 
-  public async getDoctorByEmail(email: string) {
+  public async getDoctorByEmail(email: string): Promise<GetDoctorDto> {
     try {
       return await this.doctorRepository.findOne({ email });
     } catch (error) {

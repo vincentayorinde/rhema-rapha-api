@@ -1,3 +1,4 @@
+import { PasswordEncrypterService } from './../authentication/auth-configuration/password-encrypter.service';
 import {
   Controller,
   Get,
@@ -24,11 +25,17 @@ import { RoleGuard } from '../authentication/auth-guard/role.guard';
 @Controller('doctor')
 @UseGuards(AuthGuard(), RoleGuard)
 export class DoctorController {
-  constructor(private readonly doctorService: DoctorService) {}
+  constructor(
+    private readonly doctorService: DoctorService,
+    private passwordEncrypterService: PasswordEncrypterService,
+  ) {}
 
   @Get()
   @Roles('admin')
-  public async getDoctors(@Res() res: Response, @Query() query: QueryModel) {
+  public async getDoctors(
+    @Res() res: Response,
+    @Query() query: QueryModel,
+  ): Promise<any> {
     const response = await this.doctorService.getDoctors(query);
     return res
       .status(HttpStatus.OK)
@@ -37,7 +44,10 @@ export class DoctorController {
 
   @Get('/:id')
   @Roles('admin', 'doctor')
-  public async getById(@Param('id') id: string, @Res() res: Response) {
+  public async getById(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
     const response = await this.doctorService.getDoctor(id);
     return res
       .status(HttpStatus.OK)
@@ -49,7 +59,7 @@ export class DoctorController {
   public async getDoctorsByDepartmentId(
     @Param('id') id: string,
     @Res() res: Response,
-  ) {
+  ): Promise<any> {
     const response = await this.doctorService.getByDepartmentId(id);
     return res
       .status(HttpStatus.OK)
@@ -59,8 +69,13 @@ export class DoctorController {
   @Post()
   @Roles('admin', 'doctor')
   @UsePipes(ValidationPipe)
-  public async create(@Body() Doctor: DoctorDto, @Res() res: Response) {
-    const response = await this.doctorService.addDoctor(Doctor);
+  public async create(@Body() doctor: DoctorDto, @Res() res: Response) {
+    if (doctor.password) {
+      doctor.password = (
+        await this.passwordEncrypterService.encrypt(doctor.password)
+      ).toString();
+    }
+    const response = await this.doctorService.addDoctor(doctor);
 
     return res
       .status(HttpStatus.CREATED)

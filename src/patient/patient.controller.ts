@@ -1,3 +1,4 @@
+import { PasswordEncrypterService } from './../authentication/auth-configuration/password-encrypter.service';
 import { PatientDto } from './dto/patient.dto';
 import {
   Controller,
@@ -24,11 +25,17 @@ import { Response } from 'express';
 @Controller('patient')
 @UseGuards(AuthGuard(), RoleGuard)
 export class PatientController {
-  constructor(private readonly patientService: PatientService) {}
+  constructor(
+    private readonly patientService: PatientService,
+    private passwordEncrypterService: PasswordEncrypterService,
+  ) {}
 
   @Get()
   @Roles('admin')
-  public async getPatients(@Res() res: Response, @Query() query: QueryModel) {
+  public async getPatients(
+    @Res() res: Response,
+    @Query() query: QueryModel,
+  ): Promise<any> {
     const response = await this.patientService.getPatients(query);
     return res
       .status(HttpStatus.OK)
@@ -37,7 +44,10 @@ export class PatientController {
 
   @Get('/:id')
   @Roles('admin', 'patient', 'doctor')
-  public async getById(@Param('id') id: string, @Res() res: Response) {
+  public async getById(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
     const response = await this.patientService.getPatient(id);
     return res
       .status(HttpStatus.OK)
@@ -47,7 +57,15 @@ export class PatientController {
   @Post()
   @Roles('admin', 'admin', 'patient', 'doctor')
   @UsePipes(ValidationPipe)
-  public async create(@Body() patient: PatientDto, @Res() res: Response) {
+  public async create(
+    @Body() patient: PatientDto,
+    @Res() res: Response,
+  ): Promise<any> {
+    if (patient.password) {
+      patient.password = (
+        await this.passwordEncrypterService.encrypt(patient.password)
+      ).toString();
+    }
     const response = await this.patientService.addPatient(patient);
 
     return res
@@ -61,7 +79,7 @@ export class PatientController {
     @Param('id') id: string,
     @Body() patient: PatientDto,
     @Res() res: Response,
-  ) {
+  ): Promise<any> {
     const response = await this.patientService.updatePatient(id, patient);
     return res
       .status(HttpStatus.CREATED)
@@ -70,7 +88,10 @@ export class PatientController {
 
   @Delete('/:id')
   @Roles('admin')
-  public async delete(@Param('id') id: string, @Res() res: Response) {
+  public async delete(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
     const response = await this.patientService.deletePatient(id);
     return res
       .status(HttpStatus.CREATED)
