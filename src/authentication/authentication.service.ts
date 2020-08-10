@@ -73,22 +73,23 @@ export class AuthenticationService {
     try {
       const dbUser = await this.identityUserService.getUserByEmail(user.email);
 
-      if (Object.keys(dbUser).length !== 0) {
-        const verifyPassword = await this.passwordEncrypterService.decrypt(
-          user.password,
-          dbUser.password,
-        );
-
-        if (verifyPassword) {
-          const token = await this.createToken(
-            dbUser.id,
-            dbUser.email,
-            dbUser.role,
-          );
-          return { token, dbUser };
-        }
+      if (!dbUser || Object.keys(dbUser).length === 0) {
+        return new ResultException('Wrong credentials', HttpStatus.BAD_REQUEST);
       }
-      return new ResultException('Wrong credentials', HttpStatus.BAD_REQUEST);
+
+      const verifyPassword = await this.passwordEncrypterService.decrypt(
+        user.password,
+        dbUser.password,
+      );
+
+      if (verifyPassword) {
+        const token = await this.createToken(
+          dbUser.id,
+          dbUser.email,
+          dbUser.role,
+        );
+        return { token, dbUser };
+      }
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
@@ -121,7 +122,11 @@ export class AuthenticationService {
   }
 
   public async validateUser(email: string): Promise<any> {
-    return await this.identityUserService.getUserByEmail(email);
+    try {
+      return await this.identityUserService.getUserByEmail(email);
+    } catch (error) {
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
   private async createToken(id: string, email: string, role: UserRole) {

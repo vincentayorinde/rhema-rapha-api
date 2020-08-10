@@ -5,6 +5,7 @@ import { DoctorController } from './doctor.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PassportModule } from '@nestjs/passport';
 import { DoctorRepository } from './doctor.repository';
+import { SharedModule } from '../shared/shared.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { DoctorRepository } from './doctor.repository';
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
+    SharedModule,
   ],
   controllers: [DoctorController],
   providers: [DoctorService, PasswordEncrypterService],

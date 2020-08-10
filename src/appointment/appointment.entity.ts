@@ -23,7 +23,7 @@ export class AppointmentEntity extends SharedBaseEntity {
   )
   doctor: DoctorEntity;
 
-  @OneToMany(
+  @ManyToOne(
     () => PatientEntity,
     patient => patient.appointment,
   )

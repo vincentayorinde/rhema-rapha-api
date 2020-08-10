@@ -4,12 +4,15 @@ import { PatientRepository } from './patient.repository';
 import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
 import { PatientDto } from './dto/patient.dto';
+import { IdentityUserDto } from '../authentication/identity-user/dto/identity-user.dto';
+import { IdentityUserService } from '../authentication/identity-user/identity-user.service';
 
 @Injectable()
 export class PatientService {
   constructor(
     @InjectRepository(PatientRepository)
     private readonly patientRepository: PatientRepository,
+    private readonly identityUserService: IdentityUserService,
   ) {}
 
   public async getPatients(query: QueryModel) {
@@ -33,7 +36,6 @@ export class PatientService {
   }
 
   public async getPatientByEmail(email: string) {
-    console.log('Email', email);
     try {
       return await this.patientRepository.findOne({ email });
     } catch (error) {
@@ -43,6 +45,14 @@ export class PatientService {
 
   public async addPatient(newPatient: PatientDto) {
     try {
+      const user = new IdentityUserDto();
+      user.email = newPatient.email;
+      user.fullName = newPatient.fullName;
+      user.phonenumber = newPatient.phonenumber;
+      user.password = newPatient.password;
+
+      this.identityUserService.createUser(user);
+
       return await this.patientRepository.save(newPatient);
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
@@ -52,6 +62,7 @@ export class PatientService {
   public async updatePatient(id: string, newPatient: PatientDto) {
     try {
       const dbPatient = this.getPatient(id);
+
       if (dbPatient) {
         return await this.patientRepository.update(id, newPatient);
       } else {

@@ -4,8 +4,8 @@ import { UserRole } from '../../shared/user-base.entity';
 export class PatientDto {
   public readonly id: string;
 
-  @IsNotEmpty({ message: 'DateofBirth must be provided' })
-  public readonly dateofBirth: Date;
+  @IsNotEmpty({ message: 'Date of Birth must be provided' })
+  public readonly dateOfBirth: Date;
 
   public readonly address: string;
 

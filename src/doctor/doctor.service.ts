@@ -5,12 +5,15 @@ import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
 import { DoctorDto } from './dto/doctor.dto';
 import { GetDoctorDto } from './dto/getdoctor.dto';
+import { IdentityUserService } from '../authentication/identity-user/identity-user.service';
+import { IdentityUserDto } from '../authentication/identity-user/dto/identity-user.dto';
 
 @Injectable()
 export class DoctorService {
   constructor(
     @InjectRepository(DoctorRepository)
     private readonly doctorRepository: DoctorRepository,
+    private readonly identityUserService: IdentityUserService,
   ) {}
 
   public async getDoctors(query: QueryModel): Promise<any> {
@@ -52,6 +55,14 @@ export class DoctorService {
 
   public async addDoctor(newDoctor: DoctorDto) {
     try {
+      const user = new IdentityUserDto();
+      user.email = newDoctor.email;
+      user.fullName = newDoctor.fullName;
+      user.phonenumber = newDoctor.phonenumber;
+      user.password = newDoctor.password;
+
+      this.identityUserService.createUser(user);
+
       return await this.doctorRepository.save(newDoctor);
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);

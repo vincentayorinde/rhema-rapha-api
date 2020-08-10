@@ -69,7 +69,10 @@ export class DoctorController {
   @Post()
   @Roles('admin', 'doctor')
   @UsePipes(ValidationPipe)
-  public async create(@Body() doctor: DoctorDto, @Res() res: Response) {
+  public async create(
+    @Body() doctor: DoctorDto,
+    @Res() res: Response,
+  ): Promise<any> {
     if (doctor.password) {
       doctor.password = (
         await this.passwordEncrypterService.encrypt(doctor.password)
@@ -88,7 +91,7 @@ export class DoctorController {
     @Param('id') id: string,
     @Body() Doctor: DoctorDto,
     @Res() res: Response,
-  ) {
+  ): Promise<any> {
     const response = await this.doctorService.updateDoctor(id, Doctor);
     return res
       .status(HttpStatus.CREATED)
@@ -97,7 +100,10 @@ export class DoctorController {
 
   @Delete('/:id')
   @Roles('admin')
-  public async delete(@Param('id') id: string, @Res() res: Response) {
+  public async delete(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
     const response = await this.doctorService.deleteDoctor(id);
     return res
       .status(HttpStatus.CREATED)
