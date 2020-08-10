@@ -22,5 +22,5 @@ export class IdentityUserDto {
   public password: string;
 
   public avatar: string;
-  public role: UserRole = UserRole.ADMIN;
+  public role: UserRole;
 }

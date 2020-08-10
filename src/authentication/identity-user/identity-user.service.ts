@@ -28,11 +28,11 @@ export class IdentityUserService {
     }
   }
 
-  public async getAllUser(): Promise<GetUserDto[]> {
+  public async getAllUser(): Promise<any> {
     try {
       return await this.IdentityUserRepository.find();
     } catch (error) {
-      new ResultException(error, HttpStatus.BAD_REQUEST);
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -40,7 +40,7 @@ export class IdentityUserService {
     try {
       return await this.IdentityUserRepository.save(user);
     } catch (error) {
-      new ResultException(error, HttpStatus.BAD_REQUEST);
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
 }

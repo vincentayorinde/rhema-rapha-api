@@ -7,6 +7,7 @@ import { DoctorDto } from './dto/doctor.dto';
 import { GetDoctorDto } from './dto/getdoctor.dto';
 import { IdentityUserService } from '../authentication/identity-user/identity-user.service';
 import { IdentityUserDto } from '../authentication/identity-user/dto/identity-user.dto';
+import { UserRole } from 'src/shared/user-base.entity';
 
 @Injectable()
 export class DoctorService {
@@ -55,13 +56,14 @@ export class DoctorService {
 
   public async addDoctor(newDoctor: DoctorDto) {
     try {
-      const user = new IdentityUserDto();
-      user.email = newDoctor.email;
-      user.fullName = newDoctor.fullName;
-      user.phonenumber = newDoctor.phonenumber;
-      user.password = newDoctor.password;
+      // const user = new IdentityUserDto();
+      // user.email = newDoctor.email;
+      // user.fullName = newDoctor.fullName;
+      // user.phonenumber = newDoctor.phonenumber;
+      // user.password = newDoctor.password;
+      // user.role = UserRole.DOCTOR;
 
-      this.identityUserService.createUser(user);
+      // this.identityUserService.createUser(user);
 
       return await this.doctorRepository.save(newDoctor);
     } catch (error) {

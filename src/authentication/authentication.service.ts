@@ -41,6 +41,7 @@ export class AuthenticationService {
       user.phonenumber = data.phonenumber;
       user.username = data.username;
       user.password = password;
+      data.password = password;
 
       this.registerUser(data, user);
     } catch (error) {
@@ -53,10 +54,12 @@ export class AuthenticationService {
     switch (role) {
       case 'patient':
         user.role = UserRole.PATIENT;
+        this.identityUserService.createUser(user);
         return this.patientService.addPatient(data);
 
       case 'doctor':
         user.role = UserRole.DOCTOR;
+        this.identityUserService.createUser(user);
         return this.doctorService.addDoctor(data);
 
       case 'admin':

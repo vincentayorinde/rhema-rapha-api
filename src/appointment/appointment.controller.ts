@@ -20,6 +20,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../authentication/auth-guard/role.guard';
 import { Roles } from '../authentication/auth-guard/role.decorator';
 import { QueryModel } from '../shared/model/query.model';
+import { User } from '../authentication/auth-guard/current-user.decorator';
 
 @Controller('appointment')
 @UseGuards(AuthGuard(), RoleGuard)
@@ -40,15 +41,14 @@ export class AppointmentController {
 
   @Get()
   @Roles('admin', 'doctor', 'patient')
-  public async getAppointmentsByUserId(
-    @Param('userId') userId: string,
-    @Res() res: Response,
-  ) {
+  public async getAppointmentsByUserId(@User() userId, @Res() res: Response) {
     const response = await this.appointmentService.getByUserId(userId);
     return res
       .status(HttpStatus.OK)
-      .json({ message: 'All Appointments data', data: response });
+      .json({ message: 'User Appointments data', data: response });
   }
+
+  public async getAppointmentByDoctorId() {}
 
   @Get('/:id')
   @Roles('admin', 'doctor', 'patient')

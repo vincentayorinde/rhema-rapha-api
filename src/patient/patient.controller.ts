@@ -66,6 +66,7 @@ export class PatientController {
         await this.passwordEncrypterService.encrypt(patient.password)
       ).toString();
     }
+
     const response = await this.patientService.addPatient(patient);
 
     return res

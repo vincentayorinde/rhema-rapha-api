@@ -8,11 +8,14 @@ export class AppointmentEntity extends SharedBaseEntity {
   @Column({ type: 'varchar', nullable: true, length: '200' })
   description: string;
 
-  @Column({ type: 'varchar', nullable: false })
+  @Column({ type: Date, nullable: false })
   date: Date;
 
-  @Column({ type: 'time', nullable: false })
-  appointmentTime: Date;
+  @Column({ type: 'varchar', nullable: false })
+  appointmentTime: string;
+
+  @Column({ type: 'varchar', nullable: false })
+  appointmentDay: string;
 
   @Column({ type: 'varchar', nullable: false, length: '100' })
   type: string;

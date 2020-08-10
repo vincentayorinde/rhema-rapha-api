@@ -17,7 +17,7 @@ import { SharedModule } from '../shared/shared.module';
   imports: [
     PatientModule,
     DoctorModule,
-    TypeOrmModule.forFeature([IdentityUserRepository]),
+
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),

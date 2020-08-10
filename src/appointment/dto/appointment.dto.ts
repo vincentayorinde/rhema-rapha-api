@@ -8,9 +8,9 @@ export class AppointmentDto {
   @IsNotEmpty({ message: 'Date is not provided' })
   readonly date: Date;
 
-  @IsDateString({ message: 'Date is not valid' })
   @IsNotEmpty({ message: 'Time is not provided' })
-  readonly appointmentTime: Date;
+  @IsString()
+  readonly appointmentTime: string;
 
   @IsNotEmpty({ message: 'Type is not provided' })
   @IsString()
@@ -18,7 +18,7 @@ export class AppointmentDto {
 
   @IsNotEmpty({ message: 'Appointment Day is not provided' })
   @IsString()
-  readonly appointmentDay: Date;
+  readonly appointmentDay: string;
 
   @IsNotEmpty({ message: 'Doctor Id is not provided' })
   readonly doctorId: string;

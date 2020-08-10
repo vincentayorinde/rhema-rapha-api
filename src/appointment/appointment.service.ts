@@ -14,7 +14,7 @@ export class AppointmentService {
 
   public async getByUserId(userId: string): Promise<any> {
     try {
-      return await this.appointmentRepository.find({ where: userId });
+      return await this.appointmentRepository.find();
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }
@@ -23,7 +23,6 @@ export class AppointmentService {
   public async getAppointments(query: QueryModel): Promise<any> {
     try {
       return await this.appointmentRepository.find({
-        relations: ['doctor', 'doctor.appointment'],
         take: query.pageSize,
         skip: query.pageSize * (query.page - 1),
         order: { createdAt: 'DESC' },

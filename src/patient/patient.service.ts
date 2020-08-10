@@ -1,4 +1,5 @@
-import { Injectable, HttpStatus } from '@nestjs/common';
+import { UserRole } from './../shared/user-base.entity';
+import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PatientRepository } from './patient.repository';
 import { QueryModel } from '../shared/model/query.model';
@@ -50,12 +51,11 @@ export class PatientService {
       user.fullName = newPatient.fullName;
       user.phonenumber = newPatient.phonenumber;
       user.password = newPatient.password;
+      user.role = UserRole.PATIENT;
 
-      this.identityUserService.createUser(user);
-
-      return await this.patientRepository.save(newPatient);
+      await this.patientRepository.save(newPatient);
     } catch (error) {
-      return new ResultException(error, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
