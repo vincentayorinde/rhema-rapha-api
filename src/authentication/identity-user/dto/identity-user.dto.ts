@@ -8,7 +8,7 @@ export class IdentityUserDto {
   @IsEmail()
   public email: string;
 
-  @IsNotEmpty({ message: 'Firstname cannot be null' })
+  @IsNotEmpty({ message: 'First name cannot be null' })
   public fullName: string;
 
   @IsNotEmpty({ message: 'Phonenumber cannot be null' })

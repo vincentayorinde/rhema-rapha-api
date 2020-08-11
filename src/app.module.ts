@@ -1,3 +1,4 @@
+import { NotificationService } from './notification/notification.service';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,6 +12,7 @@ import { DoctorModule } from './doctor/doctor.module';
 import { SharedModule } from './shared/shared.module';
 import { PatientModule } from './patient/patient.module';
 import { AuthenticationModule } from './authentication/authentication.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -21,9 +23,15 @@ import { AuthenticationModule } from './authentication/authentication.module';
     SharedModule,
     PatientModule,
     AuthenticationModule,
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({ autoLoadEntities: true }),
   ],
   controllers: [AppController],
-  providers: [AppService, MessageService, ConfigurationService, AppService],
+  providers: [
+    NotificationService,
+    AppService,
+    MessageService,
+    ConfigurationService,
+  ],
 })
 export class AppModule {}
