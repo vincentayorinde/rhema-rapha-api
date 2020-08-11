@@ -46,7 +46,7 @@ export class DoctorService {
     }
   }
 
-  public async getDoctorByEmail(email: string): Promise<GetDoctorDto> {
+  public async getDoctorByEmail(email: string): Promise<DoctorDto> {
     try {
       return await this.doctorRepository.findOne({ email });
     } catch (error) {
@@ -56,15 +56,6 @@ export class DoctorService {
 
   public async addDoctor(newDoctor: DoctorDto) {
     try {
-      // const user = new IdentityUserDto();
-      // user.email = newDoctor.email;
-      // user.fullName = newDoctor.fullName;
-      // user.phonenumber = newDoctor.phonenumber;
-      // user.password = newDoctor.password;
-      // user.role = UserRole.DOCTOR;
-
-      // this.identityUserService.createUser(user);
-
       return await this.doctorRepository.save(newDoctor);
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);

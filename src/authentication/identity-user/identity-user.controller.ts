@@ -17,6 +17,7 @@ import { AuthenticationService } from '../authentication.service';
 import { AuthGuard } from '@nestjs/passport';
 import { IdentityUserService } from './identity-user.service';
 import { RegisterDto } from './dto/register.dto';
+import { SignInDto } from './dto/signIn.dto';
 
 @Controller('auth')
 export class IdentityUserController {
@@ -37,11 +38,8 @@ export class IdentityUserController {
 
   @Post('login')
   @UsePipes(new ValidatorPipe())
-  public async loginUser(
-    @Body() user: { email: string; password: string },
-    @Res() res: Response,
-  ) {
-    const response = await this.authService.sigIn(user);
+  public async loginUser(@Body() user: SignInDto, @Res() res: Response) {
+    const response = await this.authService.signIn(user);
 
     return res
       .status(HttpStatus.OK)

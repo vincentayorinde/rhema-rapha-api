@@ -41,7 +41,10 @@ export class AppointmentController {
 
   @Get()
   @Roles('admin', 'doctor', 'patient')
-  public async getAppointmentsByUserId(@User() userId, @Res() res: Response) {
+  public async getAppointmentsByUserId(
+    @User() userId: any,
+    @Res() res: Response,
+  ) {
     const response = await this.appointmentService.getByUserId(userId);
     return res
       .status(HttpStatus.OK)

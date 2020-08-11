@@ -9,6 +9,7 @@ import { DoctorService } from '../doctor/doctor.service';
 import { PatientService } from '../patient/patient.service';
 import { UserRole } from '../shared/user-base.entity';
 import { RegisterDto } from './identity-user/dto/register.dto';
+import { SignInDto } from './identity-user/dto/signIn.dto';
 
 @Injectable()
 export class AuthenticationService {
@@ -54,12 +55,10 @@ export class AuthenticationService {
     switch (role) {
       case 'patient':
         user.role = UserRole.PATIENT;
-        this.identityUserService.createUser(user);
         return this.patientService.addPatient(data);
 
       case 'doctor':
         user.role = UserRole.DOCTOR;
-        this.identityUserService.createUser(user);
         return this.doctorService.addDoctor(data);
 
       case 'admin':
@@ -72,9 +71,28 @@ export class AuthenticationService {
     }
   }
 
-  public async sigIn(user: { email: string; password: string }): Promise<any> {
+  public async signInUser(user: SignInDto): Promise<any> {
+    const role = user.role.toLowerCase();
+
+    switch (role) {
+      case 'patient':
+        return this.patientService.getPatientByEmail(user.email);
+
+      case 'doctor':
+        return this.doctorService.getDoctorByEmail(user.email);
+
+      case 'admin':
+        return this.identityUserService.getUserByEmail(user.email);
+
+      default:
+        new ResultException('Invalid Role', HttpStatus.BAD_REQUEST);
+        break;
+    }
+  }
+
+  public async signIn(user: SignInDto): Promise<any> {
     try {
-      const dbUser = await this.identityUserService.getUserByEmail(user.email);
+      const dbUser = await this.signInUser(user);
 
       if (!dbUser || Object.keys(dbUser).length === 0) {
         return new ResultException('Wrong credentials', HttpStatus.BAD_REQUEST);

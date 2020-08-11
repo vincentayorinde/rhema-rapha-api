@@ -36,7 +36,7 @@ export class PatientService {
     }
   }
 
-  public async getPatientByEmail(email: string) {
+  public async getPatientByEmail(email: string): Promise<PatientDto> {
     try {
       return await this.patientRepository.findOne({ email });
     } catch (error) {

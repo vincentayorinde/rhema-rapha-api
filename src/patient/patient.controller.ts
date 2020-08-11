@@ -21,6 +21,7 @@ import { QueryModel } from '../shared/model/query.model';
 import { RoleGuard } from '../authentication/auth-guard/role.guard';
 import { PatientService } from './patient.service';
 import { Response } from 'express';
+import { User } from '../authentication/auth-guard/current-user.decorator';
 
 @Controller('patient')
 @UseGuards(AuthGuard(), RoleGuard)
@@ -30,7 +31,7 @@ export class PatientController {
     private passwordEncrypterService: PasswordEncrypterService,
   ) {}
 
-  @Get()
+  @Get('all')
   @Roles('admin')
   public async getPatients(
     @Res() res: Response,
@@ -40,6 +41,18 @@ export class PatientController {
     return res
       .status(HttpStatus.OK)
       .json({ message: 'All Patients data', data: response });
+  }
+
+  @Get()
+  @Roles('patient')
+  public async getByPatientId(
+    @User() user: any,
+    @Res() res: Response,
+  ): Promise<any> {
+    const response = await this.patientService.getPatient(user.id);
+    return res
+      .status(HttpStatus.OK)
+      .json({ message: 'Patient Data', data: response });
   }
 
   @Get('/:id')
