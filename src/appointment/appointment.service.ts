@@ -4,6 +4,7 @@ import { AppointmentRepository } from './appointment.repository';
 import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
 import { AppointmentDto } from './dto/appointment.dto';
+import { CronExpression, Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class AppointmentService {
@@ -66,6 +67,16 @@ export class AppointmentService {
       return await this.appointmentRepository.delete(id);
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  // @Cron(CronExpression.EVERY_10_SECONDS)
+  public async getAppointNotification() {
+    try {
+      const appointments = await this.appointmentRepository.find();
+      console.log('Send NOtification', appointments);
+    } catch (error) {
+      return new ResultException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }

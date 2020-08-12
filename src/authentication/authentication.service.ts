@@ -52,22 +52,30 @@ export class AuthenticationService {
 
   private registerUser(data: any, user: IdentityUserDto) {
     const role = data.role.toLowerCase();
-    switch (role) {
-      case 'patient':
-        user.role = UserRole.PATIENT;
-        return this.patientService.addPatient(data);
+    try {
+      switch (role) {
+        case 'patient':
+          user.role = UserRole.PATIENT;
 
-      case 'doctor':
-        user.role = UserRole.DOCTOR;
-        return this.doctorService.addDoctor(data);
+          this.patientService.addPatient(data);
+          break;
 
-      case 'admin':
-        user.role = UserRole.ADMIN;
-        return this.identityUserService.createUser(user);
+        case 'doctor':
+          user.role = UserRole.DOCTOR;
+          this.doctorService.addDoctor(data);
+          break;
 
-      default:
-        new ResultException('Invalid Role', HttpStatus.BAD_REQUEST);
-        break;
+        case 'admin':
+          user.role = UserRole.ADMIN;
+          this.identityUserService.createUser(user);
+          break;
+
+        default:
+          new ResultException('Invalid Role', HttpStatus.BAD_REQUEST);
+          break;
+      }
+    } catch (error) {
+      throw new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
 

@@ -68,6 +68,7 @@ export class AppointmentController {
   public async create(
     @Body() Appointment: AppointmentDto,
     @Res() res: Response,
+    @User() user: any,
   ) {
     const response = await this.appointmentService.addAppointment(Appointment);
 
@@ -80,12 +81,12 @@ export class AppointmentController {
   @Roles('admin', 'doctor', 'patient')
   public async update(
     @Param('id') id: string,
-    @Body() Appointment: AppointmentDto,
+    @Body() appointment: AppointmentDto,
     @Res() res: Response,
   ) {
     const response = await this.appointmentService.updateAppointment(
       id,
-      Appointment,
+      appointment,
     );
     return res
       .status(HttpStatus.CREATED)

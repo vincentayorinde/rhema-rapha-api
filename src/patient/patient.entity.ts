@@ -22,7 +22,6 @@ export class PatientEntity extends UserBaseEntity {
   @OneToMany(
     () => AppointmentEntity,
     appointment => appointment.patient,
-    { cascade: true, eager: true },
   )
   @JoinColumn({ name: 'appointmentId' })
   appointment: AppointmentEntity;

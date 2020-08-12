@@ -23,12 +23,14 @@ export class AppointmentEntity extends SharedBaseEntity {
   @ManyToOne(
     () => DoctorEntity,
     doctor => doctor.appointment,
+    { cascade: true, eager: true },
   )
   doctor: DoctorEntity;
 
   @ManyToOne(
     () => PatientEntity,
     patient => patient.appointment,
+    { cascade: true, eager: true },
   )
   patient: PatientEntity;
 }

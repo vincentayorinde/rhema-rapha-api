@@ -1,5 +1,4 @@
 import { HttpException } from '@nestjs/common';
-
 export class Result {
   constructor(httpStatus: any, message: string, data?: any) {
     if (data) {
