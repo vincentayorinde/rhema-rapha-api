@@ -1,5 +1,3 @@
-import { DoctorDto } from '../../doctor/dto/doctor.dto';
-import { PatientDto } from '../../patient/dto/patient.dto';
 import {
   Controller,
   Post,
@@ -48,16 +46,16 @@ export class IdentityUserController {
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req: Request) {}
+  public async googleAuth(@Req() _req: Request) {}
 
   @Get('google-redirect')
   @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req: Request) {
+  googleAuthRedirect(@Req() req: Request): Promise<any> {
     return this.authService.googleLogin(req);
   }
 
   @Get('users')
-  public async getUsers(@Res() res: Response) {
+  public async getUsers(@Res() res: Response): Promise<any> {
     const response = await this.identityUserService.getAllUser();
     return res
       .status(HttpStatus.OK)
