@@ -46,13 +46,6 @@ export class PatientService {
 
   public async addPatient(newPatient: PatientDto) {
     try {
-      const user = new IdentityUserDto();
-      user.email = newPatient.email;
-      user.fullName = newPatient.fullName;
-      user.phonenumber = newPatient.phonenumber;
-      user.password = newPatient.password;
-      user.role = UserRole.PATIENT;
-
       return await this.patientRepository.save(newPatient);
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);

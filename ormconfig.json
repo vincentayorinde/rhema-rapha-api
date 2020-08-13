@@ -1,13 +1,4 @@
-[
-  {
-    "name": "production",
-    "type": "postgres",
-    "synchronize": false,
-    "dropSchema": false,
-    "logging": true
-  },
-  {
-  "name": "development",
+{
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
@@ -18,5 +9,4 @@
   "database": "RhemaRaphaDb_Dev",
   "entities": ["dist/**/*.entity{.ts,.js}"],
   "synchronize": true
-  }
-]
+}

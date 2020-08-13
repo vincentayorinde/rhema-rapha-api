@@ -1,3 +1,4 @@
+import { error } from 'console';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorRepository } from './doctor.repository';
@@ -54,14 +55,18 @@ export class DoctorService {
     }
   }
 
-  public addDoctor(newDoctor: DoctorDto) {
+  public async addDoctor(newDoctor: DoctorDto) {
     try {
-      this.doctorRepository
+      await this.doctorRepository
         .save(newDoctor)
-        .then((res: any) => {
-          return res;
+        .then(result => {
+          if (result) {
+            return result;
+          }
         })
-        .catch(error => new Error(error));
+        .catch(error => {
+          return new ResultException(error, HttpStatus.BAD_REQUEST);
+        });
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
     }

@@ -50,7 +50,7 @@ export class AuthenticationService {
     }
   }
 
-  public async signInUser(user: SignInDto): Promise<any> {
+  public async signIn(user: SignInDto): Promise<any> {
     try {
       const dbUser = await this.identityUserService.getUserByEmail(user.email);
 
@@ -150,9 +150,9 @@ export class AuthenticationService {
     }
   }
 
-  private async checkUserCreated(createUser: any) {
+  private checkUserCreated(createUser: any) {
     try {
-      const result = await createUser();
+      const result = createUser();
 
       if (typeof result === 'object' && result !== null) {
         const user = new IdentityUserDto();
@@ -164,6 +164,7 @@ export class AuthenticationService {
 
         this.identityUserService.createUser(user);
       }
+      throw new ResultException('error', HttpStatus.BAD_REQUEST);
     } catch (error) {
       throw new ResultException(error, HttpStatus.BAD_REQUEST);
     }
