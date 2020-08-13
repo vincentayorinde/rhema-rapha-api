@@ -18,8 +18,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { IdentityUserService } from './identity-user.service';
 import { RegisterDto } from './dto/register.dto';
 import { SignInDto } from './dto/signIn.dto';
-import { ResultException } from '../../configuration/exceptions/result';
-import { error } from 'console';
 
 @Controller('auth')
 export class IdentityUserController {
@@ -33,14 +31,9 @@ export class IdentityUserController {
   public async register(@Body() user: RegisterDto, @Res() res: Response) {
     const response = await this.authService.register(user);
 
-    this.authService
-      .register(user)
-      .then(res => {
-        return res
-          .status(HttpStatus.CREATED)
-          .json({ message: 'Registration Successful', data: response });
-      })
-      .catch(error => new Error(error));
+    return res
+      .status(HttpStatus.CREATED)
+      .json({ message: 'Registration Successful', data: response });
   }
 
   @Post('login')

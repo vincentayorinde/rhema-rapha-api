@@ -1,12 +1,39 @@
-{
-  "type": "postgres",
-  "host": "localhost",
-  "port": 5432,
-  "keepConnectionAlive": true,
-  "autoLoadEntities": true,
-  "username": "postgres",
-  "password": "postgres",
-  "database": "RhemaRaphaDb_Dev",
-  "entities": ["dist/**/*.entity{.ts,.js}"],
-  "synchronize": true
-}
+[{
+    "name": "production",
+    "type": "postgres",
+    "synchronize": false,
+    "dropSchema": false,
+    "logging": true
+  },
+  {
+    "name": "development",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "keepConnectionAlive": true,
+    "autoLoadEntities": true,
+    "username": "postgres",
+    "password": "postgres",
+    "database": "RhemaRaphaDb_Dev",
+    "entities": ["dist/**/*.entity{.ts,.js}"],
+    "synchronize": true
+  },
+  {
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5445,
+    "username": "todo",
+    "password": "password123",
+    "database": "todo_db",
+    "synchronize": false,
+    "logging": true,
+    "entities": ["src/**/*.entity.ts"],
+    "migrations": ["src/migration/**/*.ts"],
+    "subscribers": ["src/subscriber/**/*.ts"],
+    "cli": {
+      "entitiesDir": "src",
+      "migrationsDir": "src/migration",
+      "subscribersDir": "src/subscriber"
+    }
+  }
+]
