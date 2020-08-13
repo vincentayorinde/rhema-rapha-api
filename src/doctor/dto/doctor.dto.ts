@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
 import { UserRole } from '../../shared/user-base.entity';
-import { Timestamp } from 'typeorm';
 
 export class DoctorDto {
   public readonly id: string;

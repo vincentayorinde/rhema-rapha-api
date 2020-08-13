@@ -18,7 +18,7 @@ export class DoctorEntity extends UserBaseEntity {
     () => DepartmentEntity,
     department => department.doctor,
   )
-  @JoinColumn({ name: 'departmentId' })
+  @JoinColumn({ name: 'department' })
   department: DepartmentEntity;
 
   @OneToMany(

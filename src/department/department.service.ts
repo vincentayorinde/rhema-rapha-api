@@ -1,9 +1,9 @@
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DepartmentRepository } from './department.repository';
-import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
 import { DepartmentDto } from './dto/department.dto';
+import { QueryModel } from 'src/shared/model/query.model';
 
 @Injectable()
 export class DepartmentService {
