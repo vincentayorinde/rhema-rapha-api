@@ -50,7 +50,7 @@ export class AuthenticationService {
     }
   }
 
-  public async signInUser(user: SignInDto): Promise<any> {
+  public async signIn(user: SignInDto): Promise<any> {
     try {
       const dbUser = await this.identityUserService.getUserByEmail(user.email);
 
@@ -128,12 +128,12 @@ export class AuthenticationService {
       switch (role) {
         case 'patient':
           user.role = UserRole.PATIENT;
-          this.checkUserCreated(() => this.patientService.addPatient(data));
+          this.checkUserCreated(data);
           break;
 
         case 'doctor':
           user.role = UserRole.DOCTOR;
-          this.checkUserCreated(() => this.doctorService.addDoctor(data));
+          this.checkUserCreated(data);
           break;
 
         case 'admin':
@@ -150,20 +150,23 @@ export class AuthenticationService {
     }
   }
 
-  private async checkUserCreated(createUser: any) {
+  private checkUserCreated(data: any) {
     try {
-      const result = await createUser();
+      this.patientService
+        .addPatient(data)
+        .then(result => {
+          const user = new IdentityUserDto();
+          user.email = result.email;
+          user.fullName = result.fullName;
+          user.phonenumber = result.phonenumber;
+          user.username = result.username;
+          user.password = result.password;
 
-      if (typeof result === 'object' && result !== null) {
-        const user = new IdentityUserDto();
-        user.email = result.email;
-        user.fullName = result.fullName;
-        user.phonenumber = result.phonenumber;
-        user.username = result.username;
-        user.password = result.password;
-
-        this.identityUserService.createUser(user);
-      }
+          // this.identityUserService.createUser(user);
+        })
+        .catch(err => {
+          throw new ResultException(err, HttpStatus.BAD_REQUEST);
+        });
     } catch (error) {
       throw new ResultException(error, HttpStatus.BAD_REQUEST);
     }
