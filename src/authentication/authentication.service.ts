@@ -50,57 +50,9 @@ export class AuthenticationService {
     }
   }
 
-  private registerUser(data: any, user: IdentityUserDto) {
-    const role = data.role.toLowerCase();
-    try {
-      switch (role) {
-        case 'patient':
-          user.role = UserRole.PATIENT;
-
-          this.patientService.addPatient(data);
-          break;
-
-        case 'doctor':
-          user.role = UserRole.DOCTOR;
-          this.doctorService.addDoctor(data);
-          break;
-
-        case 'admin':
-          user.role = UserRole.ADMIN;
-          this.identityUserService.createUser(user);
-          break;
-
-        default:
-          new ResultException('Invalid Role', HttpStatus.BAD_REQUEST);
-          break;
-      }
-    } catch (error) {
-      throw new ResultException(error, HttpStatus.BAD_REQUEST);
-    }
-  }
-
   public async signInUser(user: SignInDto): Promise<any> {
-    const role = user.role.toLowerCase();
-
-    switch (role) {
-      case 'patient':
-        return this.patientService.getPatientByEmail(user.email);
-
-      case 'doctor':
-        return this.doctorService.getDoctorByEmail(user.email);
-
-      case 'admin':
-        return this.identityUserService.getUserByEmail(user.email);
-
-      default:
-        new ResultException('Invalid Role', HttpStatus.BAD_REQUEST);
-        break;
-    }
-  }
-
-  public async signIn(user: SignInDto): Promise<any> {
     try {
-      const dbUser = await this.signInUser(user);
+      const dbUser = await this.identityUserService.getUserByEmail(user.email);
 
       if (!dbUser || Object.keys(dbUser).length === 0) {
         return new ResultException('Wrong credentials', HttpStatus.BAD_REQUEST);
@@ -166,7 +118,54 @@ export class AuthenticationService {
     return { expiresIn: expiresIn, token };
   }
 
-  public verifyToken(token: string): any {
+  private verifyToken(token: string): any {
     this.jwtService.verify(token);
+  }
+
+  private registerUser(data: any, user: IdentityUserDto) {
+    const role = data.role.toLowerCase();
+    try {
+      switch (role) {
+        case 'patient':
+          user.role = UserRole.PATIENT;
+          this.checkUserCreated(() => this.patientService.addPatient(data));
+          break;
+
+        case 'doctor':
+          user.role = UserRole.DOCTOR;
+          this.checkUserCreated(() => this.doctorService.addDoctor(data));
+          break;
+
+        case 'admin':
+          user.role = UserRole.ADMIN;
+          this.identityUserService.createUser(user);
+          break;
+
+        default:
+          new ResultException('Invalid Role', HttpStatus.BAD_REQUEST);
+          break;
+      }
+    } catch (error) {
+      throw new ResultException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  private async checkUserCreated(createUser: any) {
+    try {
+      const result = await createUser();
+
+      if (typeof result === 'object' && result !== null) {
+        const user = new IdentityUserDto();
+        user.email = result.email;
+        user.fullName = result.fullName;
+        user.phonenumber = result.phonenumber;
+        user.username = result.username;
+        user.password = result.password;
+
+        this.identityUserService.createUser(user);
+      }
+    } catch (error) {
+      throw new ResultException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }

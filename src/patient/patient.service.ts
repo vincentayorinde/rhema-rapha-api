@@ -53,7 +53,7 @@ export class PatientService {
       user.password = newPatient.password;
       user.role = UserRole.PATIENT;
 
-      await this.patientRepository.save(newPatient);
+      return await this.patientRepository.save(newPatient);
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
