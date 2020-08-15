@@ -5,32 +5,32 @@ export class PatientDto {
   public readonly id: string;
 
   @IsNotEmpty({ message: 'Date of Birth must be provided' })
-  public readonly dateOfBirth: Date;
+  public dateOfBirth: Date;
 
-  public readonly address: string;
+  public address: string;
 
-  public readonly bloodType: string;
+  public bloodType: string;
 
-  public readonly height: string;
+  public height: string;
 
-  public readonly bloodPressure: string;
+  public bloodPressure: string;
 
   @IsEmail()
   @IsNotEmpty({ message: 'Email must be provided' })
-  public readonly email: string;
+  public email: string;
 
   @IsNotEmpty({ message: 'User name must be provided' })
-  public readonly username: string;
+  public username: string;
 
   @IsNotEmpty({ message: 'User name must be provided' })
-  public readonly fullName: string;
+  public fullName: string;
 
   @IsNotEmpty({ message: 'Phone number must be provided' })
-  public readonly phonenumber: string;
+  public phonenumber: string;
 
   @IsNotEmpty({ message: 'Password must be provided' })
   public password: string;
 
-  public readonly role: UserRole;
-  public readonly avatar: string;
+  public role: UserRole;
+  public avatar: string;
 }

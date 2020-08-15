@@ -1,3 +1,5 @@
+import { DoctorDto } from './../doctor/dto/doctor.dto';
+import { PatientDto } from './../patient/dto/patient.dto';
 import { IdentityUserService } from './identity-user/identity-user.service';
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -8,13 +10,14 @@ import { ResultException } from '../configuration/exceptions/result';
 import { DoctorService } from '../doctor/doctor.service';
 import { PatientService } from '../patient/patient.service';
 import { UserRole } from '../shared/user-base.entity';
-import { RegisterDto } from './identity-user/dto/register.dto';
 import { SignInDto } from './identity-user/dto/signIn.dto';
+import { RegisterDto } from './identity-user/dto/register.dto';
+import { error } from 'console';
 
 @Injectable()
 export class AuthenticationService {
   constructor(
-    private readonly passwordEncrypterService: PasswordEncrypterService,
+    private readonly passwordEncryptedService: PasswordEncrypterService,
     private readonly jwtService: JwtService,
     private readonly identityUserService: IdentityUserService,
     private readonly doctorService: DoctorService,
@@ -33,7 +36,7 @@ export class AuthenticationService {
       }
 
       const password = (
-        await this.passwordEncrypterService.encrypt(data.password)
+        await this.passwordEncryptedService.encrypt(data.password)
       ).toString();
 
       const user = new IdentityUserDto();
@@ -42,9 +45,54 @@ export class AuthenticationService {
       user.phonenumber = data.phonenumber;
       user.username = data.username;
       user.password = password;
-      data.password = password;
 
-      this.registerUser(data, user);
+      switch (data.role.toLowerCase()) {
+        case 'patient':
+          const patient = new PatientDto();
+          patient.dateOfBirth = data.dateOfBirth;
+          patient.email = data.email;
+          patient.fullName = data.fullName;
+          patient.password = password;
+          patient.username = data.username;
+          patient.phonenumber = data.phonenumber;
+          patient.role = UserRole.PATIENT;
+
+          const patientDb = await this.patientService.addPatient(patient);
+
+          if (typeof patientDb === 'object' && patientDb !== null) {
+            user.role = UserRole.PATIENT;
+            return this.identityUserService.createUser(user);
+          }
+        case 'doctor':
+          const doctor = new DoctorDto();
+          doctor.daysAvailable = data.daysAvailable;
+          doctor.email = data.email;
+          doctor.fullName = data.fullName;
+          doctor.password = password;
+          doctor.departmentId = data.departmentId;
+          doctor.phonenumber = data.phonenumber;
+          doctor.daysAvailable = data.daysAvailable;
+          doctor.timesAvailable = data.timesAvailable;
+          doctor.role = UserRole.DOCTOR;
+
+          const doctorDb = await this.doctorService.addDoctor(doctor);
+
+          if (typeof doctorDb === 'object' && doctorDb !== null) {
+            user.role = UserRole.DOCTOR;
+            return this.identityUserService.createUser(user);
+          }
+
+        case 'admin':
+          user.role = UserRole.ADMIN;
+          return this.identityUserService.createUser(user);
+
+        default:
+          return new ResultException(
+            'Role not allowed',
+            HttpStatus.BAD_REQUEST,
+          );
+          break;
+      }
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
@@ -58,7 +106,7 @@ export class AuthenticationService {
         return new ResultException('Wrong credentials', HttpStatus.BAD_REQUEST);
       }
 
-      const verifyPassword = await this.passwordEncrypterService.decrypt(
+      const verifyPassword = await this.passwordEncryptedService.decrypt(
         user.password,
         dbUser.password,
       );
@@ -120,55 +168,5 @@ export class AuthenticationService {
 
   private verifyToken(token: string): any {
     this.jwtService.verify(token);
-  }
-
-  private registerUser(data: any, user: IdentityUserDto) {
-    const role = data.role.toLowerCase();
-    try {
-      switch (role) {
-        case 'patient':
-          user.role = UserRole.PATIENT;
-          this.checkUserCreated(data);
-          break;
-
-        case 'doctor':
-          user.role = UserRole.DOCTOR;
-          this.checkUserCreated(data);
-          break;
-
-        case 'admin':
-          user.role = UserRole.ADMIN;
-          this.identityUserService.createUser(user);
-          break;
-
-        default:
-          new ResultException('Invalid Role', HttpStatus.BAD_REQUEST);
-          break;
-      }
-    } catch (error) {
-      throw new ResultException(error, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  private checkUserCreated(data: any) {
-    try {
-      this.patientService
-        .addPatient(data)
-        .then(result => {
-          const user = new IdentityUserDto();
-          user.email = result.email;
-          user.fullName = result.fullName;
-          user.phonenumber = result.phonenumber;
-          user.username = result.username;
-          user.password = result.password;
-
-          // this.identityUserService.createUser(user);
-        })
-        .catch(err => {
-          throw new ResultException(err, HttpStatus.BAD_REQUEST);
-        });
-    } catch (error) {
-      throw new ResultException(error, HttpStatus.BAD_REQUEST);
-    }
   }
 }
