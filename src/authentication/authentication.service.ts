@@ -12,7 +12,6 @@ import { PatientService } from '../patient/patient.service';
 import { UserRole } from '../shared/user-base.entity';
 import { SignInDto } from './identity-user/dto/signIn.dto';
 import { RegisterDto } from './identity-user/dto/register.dto';
-import { error } from 'console';
 
 @Injectable()
 export class AuthenticationService {

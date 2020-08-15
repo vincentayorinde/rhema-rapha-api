@@ -3,7 +3,6 @@ import { IdentityUserRepository } from './identity-user.repository';
 import { ResultException } from '../../configuration/exceptions/result';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GetUserDto } from './dto/getuser.dto';
 
 @Injectable()
 export class IdentityUserService {
