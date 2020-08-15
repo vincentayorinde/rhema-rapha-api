@@ -20,9 +20,6 @@ export class PatientDto {
   public email: string;
 
   @IsNotEmpty({ message: 'User name must be provided' })
-  public username: string;
-
-  @IsNotEmpty({ message: 'User name must be provided' })
   public fullName: string;
 
   @IsNotEmpty({ message: 'Phone number must be provided' })

@@ -42,7 +42,7 @@ export class AuthenticationService {
       user.email = data.email;
       user.fullName = data.fullName;
       user.phonenumber = data.phonenumber;
-      user.username = data.username;
+
       user.password = password;
 
       switch (data.role.toLowerCase()) {
@@ -52,7 +52,7 @@ export class AuthenticationService {
           patient.email = data.email;
           patient.fullName = data.fullName;
           patient.password = password;
-          patient.username = data.username;
+
           patient.phonenumber = data.phonenumber;
           patient.role = UserRole.PATIENT;
 
@@ -90,7 +90,6 @@ export class AuthenticationService {
             'Role not allowed',
             HttpStatus.BAD_REQUEST,
           );
-          break;
       }
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
