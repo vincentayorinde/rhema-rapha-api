@@ -74,7 +74,12 @@ export class AppointmentService {
   public async getAppointNotification() {
     try {
       const appointments = await this.appointmentRepository.find();
-      console.log('Send NOtification', appointments);
+      const currentDate = new Date();
+      var a = moment([2007, 0, 29]);
+      var b = moment([2007, 0, 28]);
+      a.diff(b, 'days'); // 1
+
+      console.log('Send NOtification', currentDate);
     } catch (error) {
       return new ResultException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

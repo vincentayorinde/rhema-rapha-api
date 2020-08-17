@@ -6,9 +6,6 @@ import {
   Query,
   HttpStatus,
   Param,
-  Post,
-  UsePipes,
-  ValidationPipe,
   Body,
   Put,
   Delete,
@@ -66,24 +63,24 @@ export class DoctorController {
       .json({ message: 'Doctor Data', data: response });
   }
 
-  @Post()
-  @Roles('admin', 'doctor')
-  @UsePipes(ValidationPipe)
-  public async create(
-    @Body() doctor: DoctorDto,
-    @Res() res: Response,
-  ): Promise<any> {
-    if (doctor.password) {
-      doctor.password = (
-        await this.passwordEncrypterService.encrypt(doctor.password)
-      ).toString();
-    }
-    const response = await this.doctorService.addDoctor(doctor);
+  // @Post()
+  // @Roles('admin', 'doctor')
+  // @UsePipes(ValidationPipe)
+  // public async create(
+  //   @Body() doctor: DoctorDto,
+  //   @Res() res: Response,
+  // ): Promise<any> {
+  //   if (doctor.password) {
+  //     doctor.password = (
+  //       await this.passwordEncrypterService.encrypt(doctor.password)
+  //     ).toString();
+  //   }
+  //   const response = await this.doctorService.addDoctor(doctor);
 
-    return res
-      .status(HttpStatus.CREATED)
-      .json({ message: 'Doctor Created', data: response });
-  }
+  //   return res
+  //     .status(HttpStatus.CREATED)
+  //     .json({ message: 'Doctor Created', data: response });
+  // }
 
   @Put('/:id')
   @Roles('admin', 'doctor')

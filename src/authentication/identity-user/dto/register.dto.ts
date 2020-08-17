@@ -13,9 +13,6 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'Phone number cannot be null' })
   public phonenumber: string;
 
-  @IsNotEmpty({ message: 'Username cannot be null' })
-  public username: string;
-
   @Length(8)
   @IsNotEmpty({ message: 'Password cannot be null' })
   public password: string;

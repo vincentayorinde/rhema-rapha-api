@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-import { GlobalExceptionFilter } from './configuration/exceptions/exception.filter';
+import { AllExceptionsFilter } from './configuration/exceptions/exception.filter';
 
 const port = process.env.PORT;
 
@@ -15,7 +15,7 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  app.useGlobalFilters(new GlobalExceptionFilter());
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   const options = new DocumentBuilder()
     .setTitle('Rhema Rapha API')

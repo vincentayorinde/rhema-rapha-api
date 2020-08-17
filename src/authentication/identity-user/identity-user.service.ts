@@ -3,7 +3,6 @@ import { IdentityUserRepository } from './identity-user.repository';
 import { ResultException } from '../../configuration/exceptions/result';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GetUserDto } from './dto/getuser.dto';
 
 @Injectable()
 export class IdentityUserService {
@@ -39,6 +38,14 @@ export class IdentityUserService {
   public async createUser(user: IdentityUserDto) {
     try {
       return await this.IdentityUserRepository.save(user);
+    } catch (error) {
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  public async deleteUser(userId: string) {
+    try {
+      return await this.IdentityUserRepository.delete(userId);
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
     }

@@ -1,3 +1,4 @@
+import { AuthenticationService } from './../authentication/authentication.service';
 import { IdentityUserService } from './../authentication/identity-user/identity-user.service';
 import { Module } from '@nestjs/common';
 import { IdentityUserRepository } from '../authentication/identity-user/identity-user.repository';

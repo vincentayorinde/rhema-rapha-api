@@ -1,35 +1,34 @@
-import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
+import { IsNotEmpty, IsEmail } from 'class-validator';
 import { UserRole } from '../../shared/user-base.entity';
-import { Timestamp } from 'typeorm';
 
 export class DoctorDto {
   public readonly id: string;
 
   @IsNotEmpty({ message: 'Email cannot be null' })
   @IsEmail()
-  public readonly email: string;
+  public email: string;
 
   @IsNotEmpty({ message: 'First name cannot be null' })
-  public readonly fullName: string;
+  public fullName: string;
 
   @IsNotEmpty({ message: 'Phonenumber cannot be null' })
-  public readonly phonenumber: string;
+  public phonenumber: string;
 
   @IsNotEmpty({ message: 'Department cannot be null' })
-  public readonly departmentId: string;
+  public departmentId: string;
 
   @IsNotEmpty({ message: 'Days Available cannot be null' })
-  public readonly daysAvailable: string;
+  public daysAvailable: string;
 
   @IsNotEmpty({ message: 'Days Available cannot be null' })
-  public readonly timesAvailable: string;
+  public timesAvailable: string;
 
-  public readonly address: string;
+  public address: string;
 
   @IsNotEmpty({ message: 'Password cannot be null' })
   public password: string;
 
-  public readonly role: UserRole;
+  public role: UserRole;
 
-  public readonly avatar: string;
+  public avatar: string;
 }

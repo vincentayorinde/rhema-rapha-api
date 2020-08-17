@@ -14,9 +14,6 @@ export class IdentityUserDto {
   @IsNotEmpty({ message: 'Phonenumber cannot be null' })
   public phonenumber: string;
 
-  @IsNotEmpty({ message: 'username cannot be null' })
-  public username: string;
-
   @Length(8)
   @IsNotEmpty({ message: 'password cannot be null' })
   public password: string;

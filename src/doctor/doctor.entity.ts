@@ -25,7 +25,6 @@ export class DoctorEntity extends UserBaseEntity {
     () => AppointmentEntity,
     appointment => appointment.doctor,
   )
-  @JoinColumn({ name: 'appointmentId' })
   appointment: AppointmentEntity[];
 
   @Column()

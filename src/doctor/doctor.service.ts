@@ -1,5 +1,4 @@
-import { error } from 'console';
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DoctorRepository } from './doctor.repository';
 import { QueryModel } from '../shared/model/query.model';
@@ -7,8 +6,6 @@ import { ResultException } from '../configuration/exceptions/result';
 import { DoctorDto } from './dto/doctor.dto';
 import { GetDoctorDto } from './dto/getdoctor.dto';
 import { IdentityUserService } from '../authentication/identity-user/identity-user.service';
-import { IdentityUserDto } from '../authentication/identity-user/dto/identity-user.dto';
-import { UserRole } from 'src/shared/user-base.entity';
 
 @Injectable()
 export class DoctorService {
@@ -33,7 +30,9 @@ export class DoctorService {
 
   public async getByDepartmentId(id: string): Promise<any> {
     try {
-      return await this.doctorRepository.find({ where: 'departmentId is id' });
+      return await this.doctorRepository.find({
+        where: 'departmentId is' + id,
+      });
     } catch (error) {
       new ResultException(error, HttpStatus.BAD_REQUEST);
     }
@@ -57,16 +56,7 @@ export class DoctorService {
 
   public async addDoctor(newDoctor: DoctorDto) {
     try {
-      await this.doctorRepository
-        .save(newDoctor)
-        .then(result => {
-          if (result) {
-            return result;
-          }
-        })
-        .catch(error => {
-          return new ResultException(error, HttpStatus.BAD_REQUEST);
-        });
+      return await this.doctorRepository.save(newDoctor);
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
     }

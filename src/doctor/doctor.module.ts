@@ -1,3 +1,4 @@
+import { AuthenticationModule } from './../authentication/authentication.module';
 import { PasswordEncrypterService } from './../authentication/auth-configuration/password-encrypter.service';
 import { DoctorService } from './doctor.service';
 import { Module } from '@nestjs/common';

@@ -14,9 +14,6 @@ export class GetUserDto {
   @IsNotEmpty({ message: 'Phone number cannot be null' })
   public readonly phonenumber: string;
 
-  @IsNotEmpty({ message: 'username cannot be null' })
-  public readonly username: string;
-
   public readonly avatar: string;
   public readonly role: UserRole = UserRole.ADMIN;
 }

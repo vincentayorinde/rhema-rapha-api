@@ -13,6 +13,8 @@ import { SharedModule } from './shared/shared.module';
 import { PatientModule } from './patient/patient.module';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionsFilter } from './configuration/exceptions/exception.filter';
 
 @Module({
   imports: [
@@ -28,6 +30,11 @@ import { ScheduleModule } from '@nestjs/schedule';
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+
     NotificationService,
     AppService,
     MessageService,

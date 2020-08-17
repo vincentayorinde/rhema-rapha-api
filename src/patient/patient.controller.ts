@@ -44,7 +44,7 @@ export class PatientController {
   }
 
   @Get()
-  @Roles('patient')
+  @Roles('patient', 'admin')
   public async getByPatientId(
     @User() user: any,
     @Res() res: Response,
@@ -67,25 +67,25 @@ export class PatientController {
       .json({ message: 'Patient Data', data: response });
   }
 
-  @Post()
-  @Roles('admin', 'admin', 'patient', 'doctor')
-  @UsePipes(ValidationPipe)
-  public async create(
-    @Body() patient: PatientDto,
-    @Res() res: Response,
-  ): Promise<any> {
-    if (patient.password) {
-      patient.password = (
-        await this.passwordEncrypterService.encrypt(patient.password)
-      ).toString();
-    }
+  // @Post()
+  // @Roles('admin', 'admin', 'patient', 'doctor')
+  // @UsePipes(ValidationPipe)
+  // public async create(
+  //   @Body() patient: PatientDto,
+  //   @Res() res: Response,
+  // ): Promise<any> {
+  //   if (patient.password) {
+  //     patient.password = (
+  //       await this.passwordEncrypterService.encrypt(patient.password)
+  //     ).toString();
+  //   }
 
-    const response = await this.patientService.addPatient(patient);
+  //   const response = await this.patientService.addPatient(patient);
 
-    return res
-      .status(HttpStatus.CREATED)
-      .json({ message: 'Patient Created', data: response });
-  }
+  //   return res
+  //     .status(HttpStatus.CREATED)
+  //     .json({ message: 'Patient Created', data: response });
+  // }
 
   @Put('/:id')
   @Roles('admin', 'patient', 'doctor')
