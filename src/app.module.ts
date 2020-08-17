@@ -1,4 +1,3 @@
-import { NotificationService } from './notification/notification.service';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -34,8 +33,6 @@ import { AllExceptionsFilter } from './configuration/exceptions/exception.filter
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,
     },
-
-    NotificationService,
     AppService,
     MessageService,
     ConfigurationService,
