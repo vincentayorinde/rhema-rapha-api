@@ -18,14 +18,13 @@ export class DoctorEntity extends UserBaseEntity {
     () => DepartmentEntity,
     department => department.doctor,
   )
-  @JoinColumn({ name: 'department' })
+  @JoinColumn({ name: 'departmentId' })
   department: DepartmentEntity;
 
   @OneToMany(
     () => AppointmentEntity,
     appointment => appointment.doctor,
   )
-  @JoinColumn({ name: 'appointmentId' })
   appointment: AppointmentEntity[];
 
   @Column()

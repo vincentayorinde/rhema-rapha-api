@@ -1,5 +1,5 @@
 import { UserBaseEntity } from '../shared/user-base.entity';
-import { Column, JoinColumn, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { AppointmentEntity } from '../appointment/appointment.entity';
 
 @Entity({ name: 'PatientTbl' })
@@ -23,8 +23,7 @@ export class PatientEntity extends UserBaseEntity {
     () => AppointmentEntity,
     appointment => appointment.patient,
   )
-  @JoinColumn({ name: 'appointmentId' })
-  appointment: AppointmentEntity;
+  appointment: AppointmentEntity[];
 
   // @OneToMany(
   //   () => MedicationEntity,

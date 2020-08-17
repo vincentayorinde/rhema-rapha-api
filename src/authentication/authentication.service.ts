@@ -96,7 +96,7 @@ export class AuthenticationService {
     }
   }
 
-  public async signIn(user: SignInDto): Promise<any> {
+  public async signIn(user: { email: string; password: string }): Promise<any> {
     try {
       const dbUser = await this.identityUserService.getUserByEmail(user.email);
 

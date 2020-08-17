@@ -6,7 +6,6 @@ import { ResultException } from '../configuration/exceptions/result';
 import { DoctorDto } from './dto/doctor.dto';
 import { GetDoctorDto } from './dto/getdoctor.dto';
 import { IdentityUserService } from '../authentication/identity-user/identity-user.service';
-import { UserRole } from 'src/shared/user-base.entity';
 
 @Injectable()
 export class DoctorService {
@@ -57,7 +56,6 @@ export class DoctorService {
 
   public async addDoctor(newDoctor: DoctorDto) {
     try {
-      newDoctor.role = UserRole.DOCTOR;
       return await this.doctorRepository.save(newDoctor);
     } catch (error) {
       return new ResultException(error, HttpStatus.BAD_REQUEST);

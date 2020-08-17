@@ -1,7 +1,7 @@
 import { DoctorEntity } from './../doctor/doctor.entity';
 import { PatientEntity } from './../patient/patient.entity';
 import { SharedBaseEntity } from '../shared/shared-base.entity';
-import { Column, Entity, OneToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToOne, JoinColumn } from 'typeorm';
 
 @Entity({ name: 'AppointmentTbl' })
 export class AppointmentEntity extends SharedBaseEntity {
@@ -23,14 +23,22 @@ export class AppointmentEntity extends SharedBaseEntity {
   @ManyToOne(
     () => DoctorEntity,
     doctor => doctor.appointment,
-    { cascade: true, eager: true },
+    { eager: true },
   )
+  @JoinColumn({ name: 'doctorId' })
   doctor: DoctorEntity;
 
   @ManyToOne(
     () => PatientEntity,
     patient => patient.appointment,
-    { cascade: true, eager: true },
+    { eager: true },
   )
+  @JoinColumn({ name: 'patientId' })
   patient: PatientEntity;
+
+  @Column()
+  doctorId: string;
+
+  @Column()
+  patientId: string;
 }

@@ -42,4 +42,12 @@ export class IdentityUserService {
       return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
+
+  public async deleteUser(userId: string) {
+    try {
+      return await this.IdentityUserRepository.delete(userId);
+    } catch (error) {
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
 }

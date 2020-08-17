@@ -1,3 +1,4 @@
+import { IdentityUserDto } from './../authentication/identity-user/dto/identity-user.dto';
 import { Response, query } from 'express';
 import {
   Controller,
@@ -15,7 +16,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
-import { AppointmentDto } from './dto/appointment.dto';
+import { AppointmentDto, AppointmentPatientDto } from './dto/appointment.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../authentication/auth-guard/role.guard';
 import { Roles } from '../authentication/auth-guard/role.decorator';
@@ -66,11 +67,26 @@ export class AppointmentController {
   @Roles('admin', 'doctor', 'patient')
   @UsePipes(ValidationPipe)
   public async create(
-    @Body() Appointment: AppointmentDto,
+    @Body() appointment: AppointmentDto,
     @Res() res: Response,
-    @User() user: any,
   ) {
-    const response = await this.appointmentService.addAppointment(Appointment);
+    const response = await this.appointmentService.addAppointment(appointment);
+
+    return res
+      .status(HttpStatus.CREATED)
+      .json({ message: 'Appointment Created', data: response });
+  }
+
+  @Post()
+  @Roles('patient')
+  @UsePipes(ValidationPipe)
+  public async createPatientAppointment(
+    @Body() appointment: AppointmentPatientDto,
+    @Res() res: Response,
+    @User() user: IdentityUserDto,
+  ) {
+    appointment.patientId = user.id;
+    const response = await this.appointmentService.addAppointment(appointment);
 
     return res
       .status(HttpStatus.CREATED)

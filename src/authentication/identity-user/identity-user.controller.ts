@@ -1,3 +1,4 @@
+import { Roles } from './../auth-guard/role.decorator';
 import {
   Controller,
   Post,
@@ -8,6 +9,8 @@ import {
   UseGuards,
   Get,
   Req,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { ValidatorPipe } from '../../shared/pipes/validator.pipe';
@@ -15,7 +18,6 @@ import { AuthenticationService } from '../authentication.service';
 import { AuthGuard } from '@nestjs/passport';
 import { IdentityUserService } from './identity-user.service';
 import { RegisterDto } from './dto/register.dto';
-import { SignInDto } from './dto/signIn.dto';
 
 @Controller('auth')
 export class IdentityUserController {
@@ -36,7 +38,10 @@ export class IdentityUserController {
 
   @Post('login')
   @UsePipes(new ValidatorPipe())
-  public async loginUser(@Body() user: SignInDto, @Res() res: Response) {
+  public async loginUser(
+    @Body() user: { email: string; password: string },
+    @Res() res: Response,
+  ) {
     const response = await this.authService.signIn(user);
 
     return res
@@ -60,5 +65,17 @@ export class IdentityUserController {
     return res
       .status(HttpStatus.OK)
       .json({ message: 'Identity  Users', data: response });
+  }
+
+  @Delete('/:id')
+  @Roles('admin')
+  public async delete(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    const response = await this.identityUserService.deleteUser(id);
+    return res
+      .status(HttpStatus.CREATED)
+      .json({ message: 'Doctor deleted', data: response });
   }
 }

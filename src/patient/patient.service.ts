@@ -1,24 +1,21 @@
-import { UserRole } from './../shared/user-base.entity';
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PatientRepository } from './patient.repository';
 import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
 import { PatientDto } from './dto/patient.dto';
-import { IdentityUserDto } from '../authentication/identity-user/dto/identity-user.dto';
-import { IdentityUserService } from '../authentication/identity-user/identity-user.service';
 
 @Injectable()
 export class PatientService {
   constructor(
     @InjectRepository(PatientRepository)
     private readonly patientRepository: PatientRepository,
-    private readonly identityUserService: IdentityUserService,
   ) {}
 
   public async getPatients(query: QueryModel) {
     try {
       return await this.patientRepository.find({
+        relations: ['appointment'],
         take: query.pageSize,
         skip: query.pageSize * (query.page - 1),
         order: { createdAt: 'DESC' },
@@ -46,13 +43,6 @@ export class PatientService {
 
   public async addPatient(newPatient: PatientDto) {
     try {
-      const user = new IdentityUserDto();
-      user.email = newPatient.email;
-      user.fullName = newPatient.fullName;
-      user.phonenumber = newPatient.phonenumber;
-      user.password = newPatient.password;
-      user.role = UserRole.PATIENT;
-
       return await this.patientRepository.save(newPatient);
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);

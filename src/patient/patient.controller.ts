@@ -44,7 +44,7 @@ export class PatientController {
   }
 
   @Get()
-  @Roles('patient')
+  @Roles('patient', 'admin')
   public async getByPatientId(
     @User() user: any,
     @Res() res: Response,
