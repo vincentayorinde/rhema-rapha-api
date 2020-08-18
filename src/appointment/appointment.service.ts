@@ -5,7 +5,7 @@ import { QueryModel } from '../shared/model/query.model';
 import { ResultException } from '../configuration/exceptions/result';
 import { AppointmentDto } from './dto/appointment.dto';
 import { CronExpression, Cron } from '@nestjs/schedule';
-import moment from 'moment';
+import { Raw } from 'typeorm';
 
 @Injectable()
 export class AppointmentService {
@@ -71,18 +71,20 @@ export class AppointmentService {
     }
   }
 
-  // @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   public async getAppointNotification() {
     try {
-      const appointments = await this.appointmentRepository.find();
+      const yesterday = "NOW() - INTERVAL '1 DAY'";
+      const appointments = await this.appointmentRepository.find({
+        where: {
+          date: Raw(alias => `${alias} = ${yesterday}`),
+        },
+      });
 
-      const a = moment();
-      const b = moment([2007, 0, 28]);
-
-      a.diff(b, 'days');
-
-      console.log('Send NOtification');
+      // send email notifications to all users with appointment and mark as sent
+      appointments[0].patient.email;
     } catch (error) {
+      console.log('error', error);
       return new ResultException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
