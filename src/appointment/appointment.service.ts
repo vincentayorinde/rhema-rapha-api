@@ -1,3 +1,4 @@
+import { EmailService } from './../shared/service/email.service';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppointmentRepository } from './appointment.repository';
@@ -12,6 +13,7 @@ export class AppointmentService {
   constructor(
     @InjectRepository(AppointmentRepository)
     private readonly appointmentRepository: AppointmentRepository,
+    private readonly emailService: EmailService,
   ) {}
 
   public async getByUserId(userId: string): Promise<any> {
@@ -81,8 +83,12 @@ export class AppointmentService {
         },
       });
 
+      const patientEmailData = {
+        name: appointments[0].patient.fullName,
+        email: appointments[0].patient.email,
+      };
       // send email notifications to all users with appointment and mark as sent
-      appointments[0].patient.email;
+      this.emailService.emailSenderWithTemplate(patientEmailData);
     } catch (error) {
       console.log('error', error);
       return new ResultException(error, HttpStatus.INTERNAL_SERVER_ERROR);
