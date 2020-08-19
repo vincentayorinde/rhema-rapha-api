@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { AppointmentService } from './appointment.service';
 import { AppointmentController } from './appointment.controller';
 import { Module } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { AuthenticationModule } from '../authentication/authentication.module';
       defaultStrategy: 'jwt',
     }),
     AuthenticationModule,
+    SharedModule,
   ],
   controllers: [AppointmentController],
   providers: [AppointmentService],

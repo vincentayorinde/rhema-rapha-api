@@ -1,3 +1,4 @@
+import { emailSettings } from './../config';
 import { IdentityUserService } from './../authentication/identity-user/identity-user.service';
 import { Module } from '@nestjs/common';
 import { IdentityUserRepository } from '../authentication/identity-user/identity-user.repository';
@@ -19,12 +20,12 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         },
         secure: false, // true for 465, false for other ports
         auth: {
-          user: process.env.EMAIL_ID, // generated ethereal user
-          pass: process.env.EMAIL_PASS, // generated ethereal password
+          user: process.env.FROM_EMAIL, // generated ethereal user
+          pass: process.env.PASSWORD, // generated ethereal password
         },
       },
       defaults: {
-        from: '"nest-modules" <user@outlook.com>', // outgoing email ID
+        from: emailSettings.fromEmail,
       },
       template: {
         dir: process.cwd() + '/template/',

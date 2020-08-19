@@ -73,24 +73,27 @@ export class AppointmentService {
     }
   }
 
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   public async getAppointNotification() {
     try {
-      const yesterday = "NOW() - INTERVAL '1 DAY'";
+      // const yesterday = "NOW() - INTERVAL '1 DAY'";
       const appointments = await this.appointmentRepository.find({
         where: {
-          date: Raw(alias => `${alias} = ${yesterday}`),
+          // date: Raw(alias => `${alias} = ${yesterday}`),
+          date: Raw(alias => `${alias} > NOW()`),
         },
       });
-
-      const patientEmailData = {
-        name: appointments[0].patient.fullName,
-        email: appointments[0].patient.email,
-      };
-      // send email notifications to all users with appointment and mark as sent
-      this.emailService.emailSenderWithTemplate(patientEmailData);
+      if (appointments.length !== 0) {
+        const patientEmailData = {
+          name: appointments[0].patient?.fullName,
+          email: appointments[0].patient?.email,
+        };
+        // send email notifications to all users with appointment and mark as sent
+        this.emailService.emailSenderWithTemplate(patientEmailData);
+      }
+      console.log('Appointment', appointments);
+      return;
     } catch (error) {
-      console.log('error', error);
       return new ResultException(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

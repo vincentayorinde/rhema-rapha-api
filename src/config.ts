@@ -1,3 +1,7 @@
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
 export const config = {
   google: {
     callbackURL: 'http://localhost:3000/api/auth/google-redirect',
@@ -15,6 +19,14 @@ export const config = {
     'http://localhost:3000',
     'https://rhema-rapha.firebaseapp.com',
   ],
+};
+
+export const emailSettings = {
+  primaryDomain: process.env.PRIMARY_DOMAIN,
+  primaryPort: process.env.PRIMARY_PORT,
+  secondaryPort: process.env.SECONDARY_PORT,
+  usernamePassword: process.env.PASSWORD,
+  fromEmail: process.env.FROM_EMAIL,
 };
 
 export const SECRET = 'secret-key2';

@@ -1,3 +1,4 @@
+import { emailSettings } from './../../config';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 
@@ -9,15 +10,15 @@ export class EmailService {
     this.mailerService
       .sendMail({
         to: patient.email, // List of receivers email address
-        from: 'user@outlook.com', // Senders email address
+        from: emailSettings.fromEmail, // Senders email address
         subject: 'Appointment Notification ✔', // Subject line
         text: 'welcome', // plaintext body
         html: '<b>welcome</b>', // HTML body content
       })
-      .then(success => {
+      .then((success: any) => {
         console.log(success);
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.log(err);
       });
   }
@@ -29,19 +30,19 @@ export class EmailService {
     this.mailerService
       .sendMail({
         to: patient.email,
-        from: 'noreply@nestjs.com',
+        from: emailSettings.fromEmail,
         subject: 'Appointment Notification with template ✔',
-        template: __dirname + 'index', // The `.pug` or `.hbs` extension is appended automatically.
+        template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
         context: {
           // Data to be sent to template engine.
           email: patient.email,
           name: patient.name,
         },
       })
-      .then(success => {
+      .then((success: any) => {
         console.log(success);
       })
-      .catch(err => {
+      .catch((err: any) => {
         console.log(err);
       });
   }
