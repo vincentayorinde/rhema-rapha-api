@@ -1,3 +1,4 @@
+import { AppointmentMailDto } from './dto/appointment_mail.dto';
 import { EmailService } from './../shared/service/email.service';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -83,14 +84,20 @@ export class AppointmentService {
           date: Raw(alias => `${alias} > NOW()`),
         },
       });
-      if (appointments.length !== 0) {
-        const patientEmailData = {
-          name: appointments[0].patient?.fullName,
-          email: appointments[0].patient?.email,
-        };
-        // send email notifications to all users with appointment and mark as sent
-        this.emailService.emailSenderWithTemplate(patientEmailData);
-      }
+
+      appointments.forEach(appointment => {
+        const appointmentMail = new AppointmentMailDto();
+        appointmentMail.appointmentTime = appointment.appointmentTime;
+        appointmentMail.date = appointment.date;
+        appointmentMail.doctorFullName = appointment.doctor.fullName;
+        appointmentMail.description = appointment.description;
+        appointmentMail.doctorPhoneNumber = appointment.doctor.phonenumber;
+        appointmentMail.patientEmail = appointment.patient.email;
+        appointmentMail.patientFullName = appointment.patient.fullName;
+
+        this.emailService.emailSenderWithTemplate(appointmentMail);
+      });
+
       console.log('Appointment', appointments);
       return;
     } catch (error) {

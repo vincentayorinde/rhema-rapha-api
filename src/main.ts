@@ -14,6 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, appOptions);
 
   app.enableCors();
+  app.setViewEngine('hbs');
 
   app.setGlobalPrefix('api');
 

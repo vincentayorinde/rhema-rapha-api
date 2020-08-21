@@ -13,8 +13,8 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
     TypeOrmModule.forFeature([IdentityUserRepository]),
     MailerModule.forRoot({
       transport: {
-        host: 'smtp.office365.com',
-        port: 587,
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
         tls: {
           ciphers: 'SSLv3',
         },
@@ -28,7 +28,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
         from: emailSettings.fromEmail,
       },
       template: {
-        dir: process.cwd() + '/template/',
+        dir: __dirname + '/template/',
         adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
         options: {
           strict: true,

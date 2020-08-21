@@ -1,3 +1,4 @@
+import { AppointmentMailDto } from './../../appointment/dto/appointment_mail.dto';
 import { emailSettings } from './../../config';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
@@ -6,12 +7,12 @@ import { Injectable } from '@nestjs/common';
 export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  public basicEmailSender(patient: { name: string; email: string }): void {
+  public basicEmailSender(patient: AppointmentMailDto): void {
     this.mailerService
       .sendMail({
-        to: patient.email, // List of receivers email address
+        to: patient.patientEmail, // List of receivers email address
         from: emailSettings.fromEmail, // Senders email address
-        subject: 'Appointment Notification ✔', // Subject line
+        subject: 'Rhema Rapha Appointment Notification ✔', // Subject line
         text: 'welcome', // plaintext body
         html: '<b>welcome</b>', // HTML body content
       })
@@ -23,21 +24,25 @@ export class EmailService {
       });
   }
 
-  public emailSenderWithTemplate(patient: {
-    name: string;
-    email: string;
-  }): void {
+  public emailSenderWithTemplate(patient: AppointmentMailDto): void {
     this.mailerService
       .sendMail({
-        to: patient.email,
+        // to: patient.patientEmail,
+        to: 'dra81481@eoopy.com',
         from: emailSettings.fromEmail,
         subject: 'Appointment Notification with template ✔',
         template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
-        context: {
-          // Data to be sent to template engine.
-          email: patient.email,
-          name: patient.name,
-        },
+        // context: {
+        //   // Data to be sent to template engine.
+        //   date: patient.date,
+        //   appointmentTime: patient.appointmentTime,
+        //   doctorEmail: patient.doctorEmail,
+        //   patientEmail: patient.patientEmail,
+        //   patientFullName: patient.patientFullName,
+        //   doctorFullName: patient.doctorFullName,
+        //   doctorPhoneNumber: patient.doctorPhoneNumber,
+        //   description: patient.description,
+        // },
       })
       .then((success: any) => {
         console.log(success);
