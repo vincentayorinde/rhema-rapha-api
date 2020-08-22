@@ -109,6 +109,15 @@ export class AppointmentController {
       .json({ message: 'Appointment updated', data: response });
   }
 
+  @Put('/:id')
+  @Roles('admin', 'doctor', 'patient')
+  public async cancel(@Param('id') id: string, @Res() res: Response) {
+    const response = await this.appointmentService.cancelAppointment(id);
+    return res
+      .status(HttpStatus.CREATED)
+      .json({ message: 'Appointment updated', data: response });
+  }
+
   @Delete('/:id')
   @Roles('admin', 'doctor', 'patient')
   public async delete(@Param('id') id: string, @Res() res: Response) {

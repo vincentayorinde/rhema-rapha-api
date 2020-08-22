@@ -29,27 +29,17 @@ export class EmailService {
   public async emailSenderWithTemplate(patient: AppointmentMailDto) {
     try {
       const data = await ejs.renderFile(path + 'index.ejs', {
-        name: 'Stranger',
+        appointment_detail: patient,
       });
 
-      this.mailerService.sendMail({
-        // to: patient.patientEmail,
-        to: 'rwg52359@bcaoo.com',
+      const result = await this.mailerService.sendMail({
+        to: patient.patientEmail,
         from: emailSettings.fromEmail,
-        subject: 'Appointment Notification with template ✔',
+        subject: 'Appointment Notification',
         html: data,
-
-        // context: {
-        //   date: patient.date,
-        //   appointmentTime: patient.appointmentTime,
-        //   doctorEmail: patient.doctorEmail,
-        //   patientEmail: patient.patientEmail,
-        //   patientFullName: patient.patientFullName,
-        //   doctorFullName: patient.doctorFullName,
-        //   doctorPhoneNumber: patient.doctorPhoneNumber,
-        //   description: patient.description,
-        // },
       });
+
+      console.log(result);
     } catch (error) {
       console.log(error);
     }

@@ -6,5 +6,4 @@ export class AppointmentMailDto {
   public patientFullName: string;
   public doctorFullName: string;
   public doctorPhoneNumber: string;
-  public description: string;
 }

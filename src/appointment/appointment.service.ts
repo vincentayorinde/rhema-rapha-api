@@ -66,6 +66,20 @@ export class AppointmentService {
     }
   }
 
+  public async cancelAppointment(id: string) {
+    try {
+      const dbAppointment: AppointmentDto = await this.getAppointment(id);
+      if (dbAppointment) {
+        dbAppointment.isCanceled = true;
+        return await this.appointmentRepository.update(id, dbAppointment);
+      } else {
+        return new ResultException('User not found', HttpStatus.NOT_FOUND);
+      }
+    } catch (error) {
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   public async deleteAppointment(id: string) {
     try {
       return await this.appointmentRepository.delete(id);
@@ -74,14 +88,14 @@ export class AppointmentService {
     }
   }
 
-  @Cron(CronExpression.EVERY_10_SECONDS)
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   public async getAppointNotification() {
     try {
-      // const yesterday = "NOW() - INTERVAL '1 DAY'";
+      const yesterday = "NOW() - INTERVAL '1 DAY'";
       const appointments = await this.appointmentRepository.find({
         where: {
-          // date: Raw(alias => `${alias} = ${yesterday}`),
-          date: Raw(alias => `${alias} > NOW()`),
+          date: Raw(alias => `${alias} = ${yesterday}`),
+          // date: Raw(alias => `${alias} > NOW()`),
         },
       });
 
@@ -90,7 +104,6 @@ export class AppointmentService {
         appointmentMail.appointmentTime = appointment.appointmentTime;
         appointmentMail.date = appointment.date;
         appointmentMail.doctorFullName = appointment.doctor.fullName;
-        appointmentMail.description = appointment.description;
         appointmentMail.doctorPhoneNumber = appointment.doctor.phonenumber;
         appointmentMail.patientEmail = appointment.patient.email;
         appointmentMail.patientFullName = appointment.patient.fullName;

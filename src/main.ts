@@ -16,7 +16,7 @@ async function bootstrap() {
     AppModule,
     appOptions,
   );
-  app.setViewEngine('hbs');
+
   app.enableCors();
 
   app.setGlobalPrefix('api');

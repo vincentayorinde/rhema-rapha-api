@@ -25,7 +25,7 @@ export class AppointmentDto {
 
   @IsNotEmpty({ message: 'Patient Id is not provided' })
   public patientId: string;
-  isCanceled: any;
+  isCanceled = false;
 }
 
 export class AppointmentPatientDto {
@@ -52,4 +52,6 @@ export class AppointmentPatientDto {
   public readonly doctorId: string;
 
   public patientId: string;
+
+  isCanceled = false;
 }

@@ -20,7 +20,7 @@ export class AppointmentEntity extends SharedBaseEntity {
   @Column({ type: 'varchar', nullable: false, length: '100' })
   type: string;
 
-  @Column({ type: 'bool', nullable: false })
+  @Column({ type: 'bool', default: false })
   isCanceled: boolean;
 
   @ManyToOne(
