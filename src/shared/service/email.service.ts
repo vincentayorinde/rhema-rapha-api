@@ -1,8 +1,10 @@
+import * as ejs from 'ejs';
 import { AppointmentMailDto } from './../../appointment/dto/appointment_mail.dto';
 import { emailSettings } from './../../config';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-
+import { join } from 'path';
+const path = join(__dirname, '../../../src/template/');
 @Injectable()
 export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
@@ -24,16 +26,20 @@ export class EmailService {
       });
   }
 
-  public emailSenderWithTemplate(patient: AppointmentMailDto): void {
-    this.mailerService
-      .sendMail({
+  public async emailSenderWithTemplate(patient: AppointmentMailDto) {
+    try {
+      const data = await ejs.renderFile(path + 'index.ejs', {
+        name: 'Stranger',
+      });
+
+      this.mailerService.sendMail({
         // to: patient.patientEmail,
-        to: 'dra81481@eoopy.com',
+        to: 'rwg52359@bcaoo.com',
         from: emailSettings.fromEmail,
         subject: 'Appointment Notification with template ✔',
-        template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
+        html: data,
+
         // context: {
-        //   // Data to be sent to template engine.
         //   date: patient.date,
         //   appointmentTime: patient.appointmentTime,
         //   doctorEmail: patient.doctorEmail,
@@ -43,12 +49,9 @@ export class EmailService {
         //   doctorPhoneNumber: patient.doctorPhoneNumber,
         //   description: patient.description,
         // },
-      })
-      .then((success: any) => {
-        console.log(success);
-      })
-      .catch((err: any) => {
-        console.log(err);
       });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { EmailService } from './shared/service/email.service';
+import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -15,6 +15,10 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './configuration/exceptions/exception.filter';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { emailSettings } from './config';
+import { join } from 'path';
+const path = join(__dirname, '../src/template/');
 
 @Module({
   imports: [
@@ -27,6 +31,30 @@ import { AllExceptionsFilter } from './configuration/exceptions/exception.filter
     AuthenticationModule,
     ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({ autoLoadEntities: true }),
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        tls: {
+          ciphers: 'SSLv3',
+        },
+        secure: false, // true for 465, false for other ports
+        auth: {
+          user: process.env.FROM_EMAIL, // generated ethereal user
+          pass: process.env.PASSWORD, // generated ethereal password
+        },
+      },
+      defaults: {
+        from: emailSettings.fromEmail,
+      },
+      template: {
+        dir: path,
+        adapter: new EjsAdapter(), // or new PugAdapter() or new EjsAdapter()
+        options: {
+          strict: true,
+        },
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [

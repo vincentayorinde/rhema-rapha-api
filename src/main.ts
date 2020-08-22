@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AllExceptionsFilter } from './configuration/exceptions/exception.filter';
 import * as dotenv from 'dotenv';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 dotenv.config();
 
@@ -11,10 +12,12 @@ const port = process.env.PORT;
 async function bootstrap() {
   const appOptions = { cors: true };
 
-  const app = await NestFactory.create(AppModule, appOptions);
-
-  app.enableCors();
+  const app = await NestFactory.create<NestExpressApplication>(
+    AppModule,
+    appOptions,
+  );
   app.setViewEngine('hbs');
+  app.enableCors();
 
   app.setGlobalPrefix('api');
 
@@ -32,6 +35,6 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   await app.listen(port);
-  console.log('Connect at port 3000');
+  console.log(`Connect at port ${port}`);
 }
 bootstrap();
