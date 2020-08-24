@@ -95,6 +95,7 @@ export class AppointmentService {
       const appointments = await this.appointmentRepository.find({
         where: {
           date: Raw(alias => `${alias} = ${yesterday}`),
+          isCanceled: false,
           // date: Raw(alias => `${alias} > NOW()`),
         },
       });

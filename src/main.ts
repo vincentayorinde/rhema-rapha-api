@@ -18,7 +18,7 @@ async function bootstrap() {
   );
 
   app.enableCors();
-
+  app.setViewEngine('ejs');
   app.setGlobalPrefix('api');
 
   app.useGlobalFilters(new AllExceptionsFilter());
