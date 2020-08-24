@@ -3,8 +3,6 @@ import { IdentityUserRepository } from './identity-user.repository';
 import { ResultException } from '../../configuration/exceptions/result';
 import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IdentityUserEntity } from './identity-user.entity';
-import { GetUserDto } from './dto/getuser.dto';
 
 @Injectable()
 export class IdentityUserService {
@@ -29,11 +27,11 @@ export class IdentityUserService {
     }
   }
 
-  public async getAllUser(): Promise<GetUserDto[]> {
+  public async getAllUser(): Promise<any> {
     try {
       return await this.IdentityUserRepository.find();
     } catch (error) {
-      new ResultException(error, HttpStatus.BAD_REQUEST);
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -41,7 +39,15 @@ export class IdentityUserService {
     try {
       return await this.IdentityUserRepository.save(user);
     } catch (error) {
-      new ResultException(error, HttpStatus.BAD_REQUEST);
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  public async deleteUser(userId: string) {
+    try {
+      return await this.IdentityUserRepository.delete(userId);
+    } catch (error) {
+      return new ResultException(error, HttpStatus.BAD_REQUEST);
     }
   }
 }

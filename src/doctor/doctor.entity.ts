@@ -1,5 +1,5 @@
 import { UserBaseEntity } from '../shared/user-base.entity';
-import { Column, OneToOne, Entity, ManyToOne, JoinColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { DepartmentEntity } from '../department/department.entity';
 import { AppointmentEntity } from '../appointment/appointment.entity';
 
@@ -17,18 +17,16 @@ export class DoctorEntity extends UserBaseEntity {
   @ManyToOne(
     () => DepartmentEntity,
     department => department.doctor,
-    { cascade: true, eager: true },
   )
-  @JoinColumn({ name: 'department' })
+  @JoinColumn({ name: 'departmentId' })
   department: DepartmentEntity;
 
-  @OneToOne(
+  @OneToMany(
     () => AppointmentEntity,
     appointment => appointment.doctor,
-    { cascade: true, eager: true },
   )
-  @JoinColumn({ name: 'appointment' })
-  appointment: AppointmentEntity;
+  appointment: AppointmentEntity[];
 
+  @Column()
   departmentId: string;
 }

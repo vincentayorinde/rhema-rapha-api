@@ -1,20 +1,17 @@
 import { IsNotEmpty, IsEmail, Length } from 'class-validator';
 
 export class RegisterDto {
-  id: string;
+  public readonly id: string;
 
   @IsNotEmpty({ message: 'Email cannot be null' })
   @IsEmail()
-  email: string;
+  public email: string;
 
   @IsNotEmpty({ message: 'First name cannot be null' })
-  fullName: string;
+  public fullName: string;
 
   @IsNotEmpty({ message: 'Phone number cannot be null' })
-  phonenumber: string;
-
-  @IsNotEmpty({ message: 'Username cannot be null' })
-  username: string;
+  public phonenumber: string;
 
   @Length(8)
   @IsNotEmpty({ message: 'Password cannot be null' })
@@ -25,19 +22,19 @@ export class RegisterDto {
   @IsNotEmpty({ message: 'Role cannot be null' })
   public role: string;
 
-  dateOfBirth: Date;
+  public dateOfBirth: Date;
 
-  address: string;
+  public address: string;
 
-  bloodType: string;
+  public bloodType: string;
 
-  height: string;
+  public height: string;
 
-  bloodPressure: string;
+  public bloodPressure: string;
 
   public departmentId: string;
 
-  daysAvailable: string;
+  public daysAvailable: string;
 
-  timesAvailable: string;
+  public timesAvailable: string;
 }

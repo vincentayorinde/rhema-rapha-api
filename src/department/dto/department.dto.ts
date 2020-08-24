@@ -1,11 +1,11 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class DepartmentDto {
-  id: string;
+  public readonly id: string;
 
   @IsNotEmpty({ message: 'Department Name not provided' })
-  name: string;
+  public readonly name: string;
 
   @IsNotEmpty({ message: 'Department description not provided' })
-  description: string;
+  public readonly description: string;
 }

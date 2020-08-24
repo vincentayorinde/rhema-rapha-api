@@ -14,7 +14,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  public async validate(req: any, _payload: any) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  public async validate(req: any, _payload: any): Promise<any> {
     const isValid = await this.authenticationService.validateUser(req.email);
 
     if (!isValid) {

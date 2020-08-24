@@ -2,35 +2,32 @@ import { IsNotEmpty, IsEmail, IsDateString, IsString } from 'class-validator';
 import { UserRole } from '../../shared/user-base.entity';
 
 export class PatientDto {
-  id: string;
+  public readonly id: string;
 
-  @IsNotEmpty({ message: 'DateofBirth must be provided' })
-  dateofBirth: Date;
+  @IsNotEmpty({ message: 'Date of Birth must be provided' })
+  public dateOfBirth: Date;
 
-  address: string;
+  public address: string;
 
-  bloodType: string;
+  public bloodType: string;
 
-  height: string;
+  public height: string;
 
-  bloodPressure: string;
+  public bloodPressure: string;
 
   @IsEmail()
   @IsNotEmpty({ message: 'Email must be provided' })
-  email: string;
+  public email: string;
 
   @IsNotEmpty({ message: 'User name must be provided' })
-  username: string;
-
-  @IsNotEmpty({ message: 'User name must be provided' })
-  fullName: string;
+  public fullName: string;
 
   @IsNotEmpty({ message: 'Phone number must be provided' })
-  phonenumber: string;
+  public phonenumber: string;
 
   @IsNotEmpty({ message: 'Password must be provided' })
-  password: string;
+  public password: string;
 
-  role: UserRole;
-  avatar: string;
+  public role: UserRole;
+  public avatar: string;
 }

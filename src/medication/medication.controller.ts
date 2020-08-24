@@ -19,7 +19,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RoleGuard } from '../authentication/auth-guard/role.guard';
 import { Roles } from '../authentication/auth-guard/role.decorator';
 import { QueryModel } from '../shared/model/query.model';
-import { MedicationDto } from './medication.dto';
+import { MedicationDto } from './dto/medication.dto';
 
 @Controller('medication')
 @UseGuards(AuthGuard(), RoleGuard)

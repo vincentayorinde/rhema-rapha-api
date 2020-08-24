@@ -1,5 +1,4 @@
-import { DoctorDto } from '../../doctor/dto/doctor.dto';
-import { PatientDto } from '../../patient/dto/patient.dto';
+import { Roles } from './../auth-guard/role.decorator';
 import {
   Controller,
   Post,
@@ -10,6 +9,8 @@ import {
   UseGuards,
   Get,
   Req,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { ValidatorPipe } from '../../shared/pipes/validator.pipe';
@@ -41,7 +42,7 @@ export class IdentityUserController {
     @Body() user: { email: string; password: string },
     @Res() res: Response,
   ) {
-    const response = await this.authService.sigIn(user);
+    const response = await this.authService.signIn(user);
 
     return res
       .status(HttpStatus.OK)
@@ -50,19 +51,31 @@ export class IdentityUserController {
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req: Request) {}
+  public async googleAuth(@Req() _req: Request) {}
 
   @Get('google-redirect')
   @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req: Request) {
+  googleAuthRedirect(@Req() req: Request): Promise<any> {
     return this.authService.googleLogin(req);
   }
 
   @Get('users')
-  public async getUsers(@Res() res: Response) {
+  public async getUsers(@Res() res: Response): Promise<any> {
     const response = await this.identityUserService.getAllUser();
     return res
       .status(HttpStatus.OK)
       .json({ message: 'Identity  Users', data: response });
+  }
+
+  @Delete('/:id')
+  @Roles('admin')
+  public async delete(
+    @Param('id') id: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    const response = await this.identityUserService.deleteUser(id);
+    return res
+      .status(HttpStatus.CREATED)
+      .json({ message: 'Doctor deleted', data: response });
   }
 }

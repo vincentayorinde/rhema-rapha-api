@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
 import { PasswordEncrypterService } from './auth-configuration/password-encrypter.service';
-import { IdentityUserService } from './identity-user/identity-user.service';
 import { IdentityUserController } from './identity-user/identity-user.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -12,12 +11,13 @@ import { IdentityUserRepository } from './identity-user/identity-user.repository
 import { GoogleStrategy } from './auth-configuration/google.strategy';
 import { PatientModule } from '../patient/patient.module';
 import { DoctorModule } from '../doctor/doctor.module';
+import { SharedModule } from '../shared/shared.module';
 
 @Module({
   imports: [
     PatientModule,
     DoctorModule,
-    TypeOrmModule.forFeature([IdentityUserRepository]),
+
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
@@ -25,15 +25,15 @@ import { DoctorModule } from '../doctor/doctor.module';
       secret: process.env.JWT_SECRET || SECRET,
       signOptions: { expiresIn: EXPIRESIN },
     }),
+    SharedModule,
   ],
   controllers: [IdentityUserController],
   providers: [
     AuthenticationService,
     PasswordEncrypterService,
-    IdentityUserService,
     JwtStrategy,
     GoogleStrategy,
   ],
-  exports: [PassportModule, AuthenticationService],
+  exports: [PassportModule, AuthenticationService, PasswordEncrypterService],
 })
 export class AuthenticationModule {}

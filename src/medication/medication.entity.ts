@@ -28,9 +28,9 @@ export class MedicationEntity extends SharedBaseEntity {
   @Column({ type: Date, nullable: true })
   endDate: Date;
 
-  @ManyToOne(
-    () => PatientEntity,
-    patient => patient.medication,
-  )
-  patient: PatientEntity;
+  // @ManyToOne(
+  //   () => PatientEntity,
+  //   patient => patient.medication,
+  // )
+  // patient: PatientEntity;
 }
