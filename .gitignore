@@ -1,3 +1,7 @@
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+
 # compiled output
 /dist
 /node_modules
@@ -34,3 +38,31 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 .vscode/settings.json
+
+
+.idea/
+.sourcemaps/
+.sass-cache/
+.tmp/
+.versions/
+coverage/
+www/
+dist/
+node_modules/
+tmp/
+temp/
+*~
+*.sw[mnpcod]
+*.log
+*.tmp
+*.tmp.*
+log.txt
+*.sublime-project
+*.sublime-workspace
+.vscode/
+npm-debug.log*
+
+$RECYCLE.BIN/
+.DS_Store
+Thumbs.db
+UserInterfaceState.xcuserstate
