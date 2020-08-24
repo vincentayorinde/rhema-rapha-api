@@ -34,7 +34,7 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(port);
+  await app.listen(process.env.PORT || 3000);
   console.log(`Connect at port ${port}`);
 }
 bootstrap();
