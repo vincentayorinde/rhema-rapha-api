@@ -4,10 +4,7 @@ import * as Joi from '@hapi/joi';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
-
-export default interface IEnvConfigInterface {
-  [key: string]: string;
-}
+import IEnvConfigInterface from './ienvconfig';
 
 @Injectable()
 export class ConfigService {
