@@ -49,7 +49,7 @@ export class ConfigService {
     };
   }
 
-  private validateInput(envConfig: IEnvConfigInterface): IEnvConfigInterface {
+  private validateInput(envConfig: IEnvConfigInterface): any {
     const envVarsSchema: Joi.ObjectSchema = Joi.object({
       NODE_ENV: Joi.string()
         .valid('development', 'test')
@@ -61,7 +61,7 @@ export class ConfigService {
       envConfig,
     );
     if (error) {
-      throw new Error(`Config validation error: ${error.message}`);
+      return new Error(`Config validation error: ${error.message}`);
     }
     return validatedEnvConfig;
   }
