@@ -17,14 +17,13 @@ export class ConfigService {
     }
   }
 
-  public getTypeORMConfig(): TypeOrmModuleOptions {
+  public getTypeORMConfig(): any {
     const baseDir = path.join(__dirname, '../');
     const entitiesPath = `${baseDir}${this.envConfig.TYPEORM_ENTITIES}`;
     const migrationPath = `${baseDir}${this.envConfig.TYPEORM_MIGRATIONS}`;
     // const type: any = this.envConfig.TYPEORM_CONNECTION;
     return {
-      database: this.envConfig.TYPEORM_DATABASE,
-
+      DATABASE_URL: this.envConfig.TYPEORM_DATABASE,
       entities: [entitiesPath],
 
       migrations: [migrationPath],
