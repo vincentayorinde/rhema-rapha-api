@@ -1,8 +1,8 @@
+import { ConfigModule } from './config/config.module';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigurationService } from './configuration/configuration.service';
 import { MessageService } from './configuration/message.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppointmentModule } from './appointment/appointment.module';
@@ -22,6 +22,7 @@ const path = join(__dirname, '../src/template/');
 
 @Module({
   imports: [
+    ConfigModule,
     AppointmentModule,
     MedicationModule,
     DepartmentModule,
@@ -64,7 +65,6 @@ const path = join(__dirname, '../src/template/');
     },
     AppService,
     MessageService,
-    ConfigurationService,
   ],
 })
 export class AppModule {}
