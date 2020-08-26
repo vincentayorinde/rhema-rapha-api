@@ -1,4 +1,3 @@
-import { ConfigModule } from './config/config.module';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
@@ -18,6 +17,7 @@ import { AllExceptionsFilter } from './configuration/exceptions/exception.filter
 import { MailerModule } from '@nestjs-modules/mailer';
 import { emailSettings } from './config';
 import { join } from 'path';
+import { ConfigModule } from './config/config.module';
 const path = join(__dirname, '../src/template/');
 
 @Module({
@@ -31,7 +31,16 @@ const path = join(__dirname, '../src/template/');
     PatientModule,
     AuthenticationModule,
     ScheduleModule.forRoot(),
-    TypeOrmModule.forRoot({ autoLoadEntities: true }),
+    TypeOrmModule.forRoot({
+      database:
+        'postgres://oekccyrnxirqoc:7a6371bb950c828698ebe19bb939b1ff21d928ce264aeb1d226628faa597460f@ec2-52-71-231-180.compute-1.amazonaws.com:5432/dabl3kqo68sg4s',
+      cli: {
+        migrationsDir: 'src/db/migrations',
+
+        entitiesDir: 'src/db/entities',
+      },
+    }),
+    // TypeOrmModule.forRoot({ autoLoadEntities: true }),
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
