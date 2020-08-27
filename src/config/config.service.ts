@@ -39,7 +39,7 @@ class ConfigService {
       password: this.getValue('TYPEORM_PASSWORD'),
       database: this.getValue('TYPEORM_DATABASE'),
 
-      entities: ['**/*.entity{.ts,.js}'],
+      entities: ['../**/*.entity.{ts,js}'],
 
       migrationsTableName: 'migration',
 
@@ -49,7 +49,9 @@ class ConfigService {
         migrationsDir: 'src/migration',
       },
 
-      ssl: this.isProduction(),
+      ssl: {
+        rejectUnauthorized: false,
+      },
     };
   }
 }
