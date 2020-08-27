@@ -4,58 +4,42 @@ import * as Joi from '@hapi/joi';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
-import IEnvConfigInterface from './ienvconfig';
 
+interface IEnvConfigInterface {
+  [key: string]: string;
+}
 @Injectable()
 export class ConfigService {
   private readonly envConfig: IEnvConfigInterface;
 
   constructor(filePath: string) {
     const config = dotenv.parse(fs.readFileSync(filePath));
-    if (process.env.NODE_ENV === 'development') {
-      this.envConfig = this.validateInput(config);
-    }
+    this.envConfig = this.validateInput(config);
   }
 
-  public getTypeORMConfig(): any {
+  public getTypeORMConfig(): TypeOrmModuleOptions {
     const baseDir = path.join(__dirname, '../');
     const entitiesPath = `${baseDir}${this.envConfig.TYPEORM_ENTITIES}`;
     const migrationPath = `${baseDir}${this.envConfig.TYPEORM_MIGRATIONS}`;
     const type: any = this.envConfig.TYPEORM_CONNECTION;
-    if (process.env.NODE_ENV === 'development') {
-      return {
-        type,
-        host: this.envConfig.TYPEORM_HOST,
-        username: this.envConfig.TYPEORM_USERNAME,
-        password: this.envConfig.TYPEORM_PASSWORD,
-        database: this.envConfig.TYPEORM_DATABASE,
-        port: Number.parseInt(this.envConfig.TYPEORM_PORT, 10),
-        logging: false,
-        entities: [entitiesPath],
-        migrations: [migrationPath],
-        migrationsRun: this.envConfig.TYPEORM_MIGRATIONS_RUN === 'true',
-        cli: {
-          migrationsDir: 'src/db/migrations',
-          entitiesDir: 'src/db/entities',
-        },
-      };
-    } else {
-      return {
-        DATABASE_URL: this.envConfig.TYPEORM_DATABASE,
-        entities: [entitiesPath],
-
-        migrations: [migrationPath],
-        migrationsRun: this.envConfig.TYPEORM_MIGRATIONS_RUN === 'true',
-
-        cli: {
-          migrationsDir: 'src/db/migrations',
-
-          entitiesDir: 'src/db/entities',
-        },
-      };
-    }
-
-    // const type: any = this.envConfig.TYPEORM_CONNECTION;
+    return {
+      type,
+      url: this.envConfig.DATABASE_URL,
+      host: this.envConfig.TYPEORM_HOST,
+      username: this.envConfig.TYPEORM_USERNAME,
+      password: this.envConfig.TYPEORM_PASSWORD,
+      database: this.envConfig.TYPEORM_DATABASE,
+      port: Number.parseInt(this.envConfig.TYPEORM_PORT, 10),
+      logging: false,
+      entities: [entitiesPath],
+      migrations: [migrationPath],
+      migrationsRun: this.envConfig.TYPEORM_MIGRATIONS_RUN === 'true',
+      cli: {
+        migrationsDir: 'src/db/migrations',
+        entitiesDir: 'src/db/entities',
+      },
+      ssl: true,
+    };
   }
 
   private validateInput(envConfig: IEnvConfigInterface): any {
