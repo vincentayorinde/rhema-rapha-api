@@ -17,7 +17,9 @@ import { AllExceptionsFilter } from './configuration/exceptions/exception.filter
 import { MailerModule } from '@nestjs-modules/mailer';
 import { emailSettings } from './config';
 import { join } from 'path';
-import { ConfigModule } from './config/config.module';
+import { ConfigService } from '@nestjs/config/dist/config.service';
+import { configService } from './config/config.service';
+import { ConfigModule } from '@nestjs/config/dist/config.module';
 const path = join(__dirname, '../src/template/');
 
 @Module({
@@ -31,7 +33,7 @@ const path = join(__dirname, '../src/template/');
     PatientModule,
     AuthenticationModule,
     ScheduleModule.forRoot(),
-    TypeOrmModule.forRoot({ autoLoadEntities: true }),
+    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     MailerModule.forRoot({
       transport: {
         host: process.env.EMAIL_HOST,
@@ -59,6 +61,7 @@ const path = join(__dirname, '../src/template/');
   ],
   controllers: [AppController],
   providers: [
+    ConfigService,
     {
       provide: APP_FILTER,
       useClass: AllExceptionsFilter,

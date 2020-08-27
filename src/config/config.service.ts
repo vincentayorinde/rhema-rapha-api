@@ -1,61 +1,67 @@
-import { Injectable } from '@nestjs/common';
+// src/config/config.service.ts
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import * as Joi from '@hapi/joi';
-import * as dotenv from 'dotenv';
-import * as fs from 'fs';
-import * as path from 'path';
 
-interface IEnvConfigInterface {
-  [key: string]: string;
-}
-@Injectable()
-export class ConfigService {
-  private readonly envConfig: IEnvConfigInterface;
+require('dotenv').config();
 
-  constructor(filePath: string) {
-    const config = dotenv.parse(fs.readFileSync(filePath));
-    this.envConfig = this.validateInput(config);
+class ConfigService {
+  constructor(private env: { [k: string]: string | undefined }) {}
+
+  private getValue(key: string, throwOnMissing = true): any {
+    const value = this.env[key];
+    if (!value && throwOnMissing) {
+      return new Error(`config error - missing env.${key}`);
+    }
+
+    return value;
   }
 
-  public getTypeORMConfig(): TypeOrmModuleOptions {
-    const baseDir = path.join(__dirname, '../');
-    const entitiesPath = `${baseDir}${this.envConfig.TYPEORM_ENTITIES}`;
-    const migrationPath = `${baseDir}${this.envConfig.TYPEORM_MIGRATIONS}`;
-    const type: any = this.envConfig.TYPEORM_CONNECTION;
+  public ensureValues(keys: string[]) {
+    keys.forEach(k => this.getValue(k, true));
+    return this;
+  }
+
+  public getPort() {
+    return this.getValue('PORT', true);
+  }
+
+  public isProduction() {
+    const mode = this.getValue('MODE', false);
+    return mode != 'DEV';
+  }
+
+  public getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
-      type,
-      url: this.envConfig.DATABASE_URL,
-      host: this.envConfig.TYPEORM_HOST,
-      username: this.envConfig.TYPEORM_USERNAME,
-      password: this.envConfig.TYPEORM_PASSWORD,
-      database: this.envConfig.TYPEORM_DATABASE,
-      port: Number.parseInt(this.envConfig.TYPEORM_PORT, 10),
-      logging: false,
-      entities: [entitiesPath],
-      migrations: [migrationPath],
-      migrationsRun: this.envConfig.TYPEORM_MIGRATIONS_RUN === 'true',
+      type: 'postgres',
+      url: this.getValue('DATABASE_URL'),
+      host: this.getValue('TYPEORM_HOST'),
+      port: parseInt(this.getValue('TYPEORM_PORT')),
+      username: this.getValue('TYPEORM_USERNAME'),
+      password: this.getValue('TYPEORM_PASSWORD'),
+      database: this.getValue('TYPEORM_DATABASE'),
+
+      entities: ['**/*.entity{.ts,.js}'],
+
+      migrationsTableName: 'migration',
+
+      migrations: ['src/migration/*.ts'],
+
       cli: {
-        migrationsDir: 'src/db/migrations',
-        entitiesDir: 'src/db/entities',
+        migrationsDir: 'src/migration',
       },
-      ssl: true,
+
+      ssl: this.isProduction(),
     };
   }
-
-  private validateInput(envConfig: IEnvConfigInterface): any {
-    const envVarsSchema: Joi.ObjectSchema = Joi.object({
-      NODE_ENV: Joi.string()
-        .valid('development', 'test')
-        .default('development'),
-      HTTP_PORT: Joi.number().required(),
-    }).unknown(true);
-
-    const { error, value: validatedEnvConfig } = envVarsSchema.validate(
-      envConfig,
-    );
-    if (error) {
-      return new Error(`Config validation error: ${error.message}`);
-    }
-    return validatedEnvConfig;
-  }
 }
+
+const configService = new ConfigService(process.env).ensureValues([
+  'DATABASE_URL',
+  'TYPEORM_HOST',
+  'TYPEORM_PORT',
+  'TYPEORM_USERNAME',
+  'TYPEORM_PASSWORD',
+  'TYPEORM_DATABASE',
+  '',
+]);
+
+export { configService };
