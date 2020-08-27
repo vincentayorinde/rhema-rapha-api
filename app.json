@@ -1,0 +1,40 @@
+{
+    "env": {
+        "DATABASE_URL": {
+            "required": true
+        },
+        "jwtToken":{
+             "required": true
+        },
+        "NODE_ENV":{
+             "required": true
+        },
+        "NPM_CONFIG_PRODUCTION":{
+             "required": true
+        }
+       
+    },
+    "addons": [
+        {
+            "plan": "heroku-postgresql",
+            "as": "DATABASE_URL",
+            "options": {
+                "version": "9.5"
+            }
+        }
+    ],
+    "buildpacks": [
+        {
+            "url": "heroku/nodejs"
+        }
+    ],
+    "description": "",
+    "formation": {
+        "web": {
+            "quantity": 1
+        }
+    },
+    "name": "rhema-rapha-api",
+    "scripts": {},
+    "stack": "heroku-18"
+}
